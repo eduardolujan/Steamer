@@ -1,0 +1,51 @@
+{% extends "default/index.html" %}
+{% block header %}
+
+<script type="text/javascript" charset="utf-8">
+
+$(document).ready(function(){ 
+ $('select').chosen();
+ $("#submit").click(function(){ $("#hostservice").submit() })
+
+{% if remove %}
+ $("select#id_host").chosen().change(function(){
+     $.getJSON("/api/service/forhost/"+$(this).val()+"/", 
+        function(j) {
+            var options = '<option value=""> Choose </option>';
+            for (var i = 0; i < j.length; i++) {
+                options += '<option value="' + parseInt(j[i].id) + '">' + j[i]['service_description'] + '</option>';
+            }
+            $("#id_service").empty();
+            $("#id_service").append(options);
+            $("#id_service option:first").attr('selected', 'selected');
+            $("#id_service").attr('disabled', false);
+            $("#id_service").trigger("liszt:updated");
+        })
+        $("#id_service").attr('selected', 'selected');
+    })
+
+{% endif %}
+
+
+
+});
+
+</script>
+{% endblock header %}
+{% block content %}
+{% if remove %}
+<form method="POST" id="hostservice" action="/service/removehost">
+{% else %}
+<form method="POST" id="hostservice" action="/service/addhost">
+{% endif %}
+{% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    {% if remove %}
+    <a id="submit" href="#" class="sbttn">Remove service from host</a>
+    {% else %}
+    <a id="submit" href="#" class="sbttn">Add service to host</a>
+    {% endif %}
+</form>
+{% endblock content %}

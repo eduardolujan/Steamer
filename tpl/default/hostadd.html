@@ -1,0 +1,45 @@
+{% extends "default/index.html" %}
+{% block header %}
+<script type="text/Javascript" charset="utf-8">
+    $(document).ready(function(){ 
+        $('select').chosen();
+        $("#submit").click(function(){
+            $.ajax({
+                type: 'POST',
+                url: '/api/host/',
+                processData:false,
+                contentType:'application/json',
+                data: JSON.stringify({host_name:$("#id_name").val(),
+                       use:$("#id_template").val(),
+                       address:$("#id_address").val()
+                }),
+                statusCode: {
+                    201: function(){ window.location = "/service/addhost"},
+                },
+                dataType: "json"
+                });
+        })
+     });
+</script>
+{% endblock header %}
+
+{% block content %}
+<form id="hostform"  method="POST" action="/host/add/">
+    {% csrf_token %}
+        <div class="formFields">
+            <ul>
+        {% for field in form %}
+                <div style="margin-right:5px;max-width:40%;">
+                    <span class="error">{{ field.errors }}</span>
+                    {{ field.label_tag }}:
+                </div>
+                <div style="max-width:40%;right:0; display:block;">
+                    {{ field }}
+                </div>
+        {% endfor %}
+            </ul>
+        </div>
+        <br/>
+    <a id="submit" href="#" class="sbttn">Add to Nagios</a>
+</form>
+{% endblock content %}

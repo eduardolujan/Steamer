@@ -1,0 +1,10 @@
+{% extends "default/index.html" %}
+        {% block title%}
+            <title>{{ flatpage.title }}</title>
+        {% endblock title%}
+        {% block content %}
+            {{ flatpage.content }}
+            <script type="text/javascript"> 
+                $("#toc").tableOfContents($(".actualcontent"), {startLevel:3});
+            </script>
+        {% endblock content %}

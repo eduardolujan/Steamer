@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block title %}
+        <title>That nagios thing.</title>
+        {% endblock title %}
+        <meta charset="utf-8">
+        <meta name="description" content="Yet another nagios baker.">
+        <link rel="Shortcut Icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.png">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/reset.css" type="text/css" media="screen">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/chosen.css" type="text/css" media="screen">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/queries/netbooks-tablets.css" type="text/css" media="screen and (max-width: 1007px)" />            
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/boxy.css" type="text/css" media="screen" />            
+            
+        <script type="text/javascript" src="{{ STATIC_URL }}js/html5.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>     
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>    
+        <script type="text/javascript" src="{{ STATIC_URL }}js/chosen.jquery.min.js"></script>     
+        <script type="text/javascript" src="{{ STATIC_URL }}js/slimScroll.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.boxy.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tableofcontents.min.js"></script>
+           
+        <!--[if IE 7]><link rel="stylesheet" href="css/ie/ie7.css" type="text/css" media="screen"><![endif]-->
+        <!--[if lt IE 7]><link rel="stylesheet" href="css/ie/ie6.css" type="text/css" media="screen"><![endif]-->
+        {% block header %}
+        {% endblock header %}
+    </head>
+    <script type="text/javascript">
+    //<![CDATA[
+         $(document).ready(function(){
+             $("#push > span").click(
+                function(){
+                        Boxy.ask(["The following action will publish the", 
+                                 "current configuration to Nagios servers.", 
+                                 "Are you completly sure of what you\'re ",
+                                 "about to do ?"].join(" "), {1:"Abort", 2:"Publish"}, 
+                                 
+                                 function(r) { 
+                                
+                                    if (r > 1) { 
+                                        document['spinner']=new Boxy("<p>&nbsp;</p><p>Please wait..<img src=\"/static/img/loader.gif\"></p>") ;
+                                        $.getJSON('/json/push', function(data){
+                                            document['spinner'].boxy.remove()
+                                            var response = data.succeeded ? data.stdout : data.stderr;
+                                            var push_status = $('<p style="min-width:600px;max-height:450px;overflow:scroll;">').html(response.replace(/\n/g, "<br />"));
+                                            new Boxy(push_status[0], {title: "Push results", modal: true, y: "20%"}) 
+                                            $("p.boxy-content").slimScroll({ height:'500px', color:'#5FBA3D'})
+                                            });
+                                    }
+                                
+                       });
+                }
+             ); 
+            }
+         )
+    //]]>
+    </script>
+    <body>
+    <div id="wrap">
+            <header>
+                <div class="inside">
+                    <h1>Steamer<span> lite!  </span></h1> 
+                </div>
+            </header>
+            <aside>
+
+                   {% block menu %}
+                   </br>
+                   </br>
+                   <h3>Quick stuff &raquo;</h3></br>
+                   </br>
+                   <ul>    
+                       <li> <a href='/'>Finder</a></li>
+                       {% if perms.core.add_host %}
+                       <li> <a href='/host/add'>Add a host</a> </li>
+                       {% endif %}
+                       {% if perms.core.delete_host %}
+                       <li> <a href='/host/delete'>Remove host</a> </li>
+                       {% endif %}
+                       {% if perms.core.change_service %}
+                       <li> <a href='/service/addhost'>Add service</a> </li>
+                       <li> <a href='/service/removehost'>Remove service</a> </li>
+                       {% endif %}
+                       <li> <a href='/logout?next=/'>Logout</a> </li>
+                       </ul>
+                       {% if user.is_staff %}
+                       <h3>Staff &raquo;</h3></br>
+                       <ul>        
+                       <li> <a href="/admin">Advanced Config</a> </li>
+                       <li class="push" id="push"><span>Push'n Reload</span></li>
+                       </ul>   
+                       <h3>Docs &raquo;</h3></br>
+                       <ul>        
+                       <li> <a href="/admin">Rest API</a> </li>
+                       <li> <a href="/doc/steamer/">Guide to Steamer</a> </li>
+                       <li> <a href="/admin">Bugs</a> </li>
+                       </ul>   
+                   {% endif %}
+                   {% endblock menu %}
+            </aside>
+            <article>
+                <section>
+                    <div class="inside">
+
+                        <div class="actualcontent">
+                          <ul id="toc"> </ul>  
+                          {% block content %}
+                          {% endblock %}
+                        </div>
+                    <div>
+                    {% block pagination %}
+                    {% endblock %}
+                    </div>
+
+                    </div>
+                </section>  
+            </article>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

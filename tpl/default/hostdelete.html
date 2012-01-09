@@ -1,0 +1,35 @@
+{% extends "default/index.html" %}
+
+{% block header %}
+<script type="text/Javascript" charset="utf-8">
+    $(document).ready(function(){ 
+        $('select').chosen(); 
+        $("#submit").click(
+               function() { $("#hostdelform").submit()
+        })
+     });
+</script>
+{% endblock header %}
+
+{% block content %}
+
+<form id="hostdelform"  method="POST" action="/host/add/">
+    {% csrf_token %}
+        <div class="formFields">
+            <ul>
+        {% for field in form %}
+                <div style="margin-right:5px;max-width:40%;">
+                    <span class="error">{{ field.errors }}</span>
+                    {{ field.label_tag }}:
+                </div>
+                <div style="max-width:40%;right:0; display:block;">
+                    {{ field }}
+                </div>
+        {% endfor %}
+            </ul>
+        </div>
+        <br/>
+    <a id="submit" href="#" class="sbttn">Delete from nagios</a>
+</form>
+
+{% endblock content %}

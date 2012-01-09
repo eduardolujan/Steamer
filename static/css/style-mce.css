@@ -1,0 +1,143 @@
+@font-face {
+    font-family: 'NeutonRegular';
+    src: url('../fonts/Neuton-Regular-webfont.eot');
+    src: url('../fonts/Neuton-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Neuton-Regular-webfont.woff') format('woff'),
+         url('../fonts/Neuton-Regular-webfont.ttf') format('truetype'),
+         url('../fonts/Neuton-Regular-webfont.svg#NeutonRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'NeutonExtraLight';
+    src: url('../fonts/Neuton-ExtraLight-webfont.eot');
+    src: url('../fonts/Neuton-ExtraLight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Neuton-ExtraLight-webfont.woff') format('woff'),
+         url('../fonts/Neuton-ExtraLight-webfont.ttf') format('truetype'),
+         url('../fonts/Neuton-ExtraLight-webfont.svg#NeutonExtraLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'NeutonLight';
+    src: url('../fonts/Neuton-Light-webfont.eot');
+    src: url('../fonts/Neuton-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Neuton-Light-webfont.woff') format('woff'),
+         url('../fonts/Neuton-Light-webfont.ttf') format('truetype'),
+         url('../fonts/Neuton-Light-webfont.svg#NeutonLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'NeutonItalic';
+    src: url('../fonts/Neuton-Italic-webfont.eot');
+    src: url('../fonts/Neuton-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Neuton-Italic-webfont.woff') format('woff'),
+         url('../fonts/Neuton-Italic-webfont.ttf') format('truetype'),
+         url('../fonts/Neuton-Italic-webfont.svg#NeutonItalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'NeutonBold';
+    src: url('../fonts/Neuton-Bold-webfont.eot');
+    src: url('../fonts/Neuton-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Neuton-Bold-webfont.woff') format('woff'),
+         url('../fonts/Neuton-Bold-webfont.ttf') format('truetype'),
+         url('../fonts/Neuton-Bold-webfont.svg#NeutonBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'NeutonExtraBold';
+    src: url('../fonts/Neuton-ExtraBold-webfont.eot');
+    src: url('../fonts/Neuton-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Neuton-ExtraBold-webfont.woff') format('woff'),
+         url('../fonts/Neuton-ExtraBold-webfont.ttf') format('truetype'),
+         url('../fonts/Neuton-ExtraBold-webfont.svg#NeutonExtraBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'NeutonCursiveRegular';
+    src: url('../fonts/NeutonCursive-Regular-webfont.eot');
+    src: url('../fonts/NeutonCursive-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/NeutonCursive-Regular-webfont.woff') format('woff'),
+         url('../fonts/NeutonCursive-Regular-webfont.ttf') format('truetype'),
+         url('../fonts/NeutonCursive-Regular-webfont.svg#NeutonCursiveRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'YanoneKaffeesatzThin';
+    src: url('../fonts/YanoneKaffeesatz-Thin-webfont.eot');
+    src: url('../fonts/YanoneKaffeesatz-Thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/YanoneKaffeesatz-Thin-webfont.woff') format('woff'),
+         url('../fonts/YanoneKaffeesatz-Thin-webfont.ttf') format('truetype'),
+         url('../fonts/YanoneKaffeesatz-Thin-webfont.svg#YanoneKaffeesatzThin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'YanoneKaffeesatzLight';
+    src: url('../fonts/YanoneKaffeesatz-Light-webfont.eot');
+    src: url('../fonts/YanoneKaffeesatz-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/YanoneKaffeesatz-Light-webfont.woff') format('woff'),
+         url('../fonts/YanoneKaffeesatz-Light-webfont.ttf') format('truetype'),
+         url('../fonts/YanoneKaffeesatz-Light-webfont.svg#YanoneKaffeesatzLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'YanoneKaffeesatzRegular';
+    src: url('../fonts/YanoneKaffeesatz-Regular-webfont.eot');
+    src: url('../fonts/YanoneKaffeesatz-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/YanoneKaffeesatz-Regular-webfont.woff') format('woff'),
+         url('../fonts/YanoneKaffeesatz-Regular-webfont.ttf') format('truetype'),
+         url('../fonts/YanoneKaffeesatz-Regular-webfont.svg#YanoneKaffeesatzRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'YanoneKaffeesatzBold';
+    src: url('../fonts/YanoneKaffeesatz-Bold-webfont.eot');
+    src: url('../fonts/YanoneKaffeesatz-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/YanoneKaffeesatz-Bold-webfont.woff') format('woff'),
+         url('../fonts/YanoneKaffeesatz-Bold-webfont.ttf') format('truetype'),
+         url('../fonts/YanoneKaffeesatz-Bold-webfont.svg#YanoneKaffeesatzBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.normalp{ 
+    font: 17px NeutonExtraLight, Geneva, sans-serif; 
+}
+ul.normalp li {
+    list-style-type:circle;
+    margin-left:30px;
+}
+
+
+
+

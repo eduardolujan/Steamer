@@ -1,0 +1,9 @@
+{% extends "default/index.html" %}
+{% block content %}
+<form method="POST" action="/hosttemplate/add/">
+    <table>
+        {{ form }}
+    </table>
+    <input type='submit' value='add to nagios'>
+</form>
+{% endblock content %}

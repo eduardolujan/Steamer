@@ -1,0 +1,41 @@
+{% extends "default/index.html" %}
+{% block header %}
+<script type="text/Javascript" charset="utf-8">
+    
+function showServices(id){
+    if (id == '') { $('#service_ul').empty();}
+    $.getJSON("/api/service/forhost/"+id+"/", function(j) {
+        $('#service_ul').replaceWith('<ul id="service_ul"></ul>');
+        j.map(function(data){
+            $('#service_ul').append(
+               '<li class="service_li"> %s </li>'.replace("%s", data['service_description']))    
+        })
+        $('#service_ul').slimScroll({ height:'400px'})
+   })
+}
+
+$(function(){
+            $('#direct_host').chosen().change(function() { showServices($(this).val()); });
+});
+
+
+
+</script>
+{% endblock header %}
+{% block content %}
+<h3>Pickup a host.</h3>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<div style='float: left;width:150pt'>
+<select id='direct_host' class="chosen">
+    <option value="" selected="selected">---------</option>
+{% for host in hlist %}
+    <option value='{{host.id}}'>{{ host }} </option>
+{% endfor %}
+</select>
+</div>
+<div id='service' style='float:right;margin-top:33px;width:400px'>
+    <h3>Services:</h3> </br> </br> <ul id="service_ul"></ul>
+</div>
+{% endblock content %}
