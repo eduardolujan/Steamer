@@ -1,4 +1,3 @@
-from defaults import *
 
 ADMINS = (('Admin', 'admin@email'),)
 MANAGERS = ADMINS

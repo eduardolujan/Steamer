@@ -1,21 +1,13 @@
 import os
 from django.conf import global_settings as default_settings
+from custom_settings import *
+
 
 PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 TEMPLATE_DEBUG = DEBUG = True
 
-ADMINS = (('Admin', 'jfardello@uoc.edu'),)
+
 SEND_BROKEN_LINK_EMAILS=False
-MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', 'NAME': '/mnt/ramdisk/djagios.db'
-    }
-}
-
-TIME_ZONE = 'Europe/Madrid'
-
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = True
@@ -33,7 +25,7 @@ NAGIOS_PREFIX="/opt/local/nagios/"
 STATIC_ROOT = PROJECT_ROOT + '/staticfiles/' 
 STATIC_URL = '/static/'
 GRAPPELLI_ADMIN_TITLE="The Nagios Config Creature from the Black Lagoon."
-GRAPPELLI_INDEX_DASHBOARD = 'doctor.djagios.dashboard.DocDashboard'
+GRAPPELLI_INDEX_DASHBOARD = 'steamer.djagios.dashboard.DocDashboard'
 
 
 ADMIN_MEDIA_PREFIX = STATIC_URL+'grappelli/'
@@ -67,7 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-ROOT_URLCONF = 'doctor.urls'
+ROOT_URLCONF = 'steamer.urls'
 
 TEMPLATE_DIRS = (
         PROJECT_ROOT + "/tpl/"
@@ -85,7 +77,7 @@ INSTALLED_APPS = (
     'grappelli',
     'django.contrib.admin',
     'django_evolution',
-    'doctor.djagios',
+    'steamer.djagios',
 )
 
 
@@ -110,8 +102,8 @@ LOGGING = {
     },
     'loggers': {
         'django.request': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
-        'doctor.djagios.models': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
-        'doctor.djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
-        'doctor.api.handlers': { 'handlers': ['console'], 'level': 'DEBUG', 'propagate': True, },
+        'steamer.djagios.models': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
+        'steamer.djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
+        'steamer.api.handlers': { 'handlers': ['console'], 'level': 'DEBUG', 'propagate': True, },
     }
 }
