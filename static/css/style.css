@@ -139,45 +139,35 @@ mark, rp, rt, ruby, summary, time{ display: inline }
 
 
 
-select{ 
-    min-width:200px; 
-    max-width:200px; 
+select { 
+    min-width:220px; 
+    max-width:220px; 
 }
-input{min-width:185px;max-width:185px;}
+input{min-width:200px;max-width:200px;}
 input[type="password"], input[type="text"], textarea { padding: 5px; border: 2px solid #CCCCCC; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
 input[type="password"], input[type="text"]:hover, textarea:hover { border: 2px solid #CCCC55; }
 input[type="password"], input[type="text"]:focus, textarea:focus { border: 2px solid #DDDDDD; background: -webkit-gradient(linear, left top, left bottom, from(#e3e3e3), to(#fff), color-stop(0.3, #fff)); }
-
 
 label { 
     font: normal normal 18px/18px YanoneKaffeesatzLight, Helvetica, Verdana, sans-serif;
     text-decoration: none;
 }
 
-
-
-/* Site-wide properties ======================================================== */
 body{
-    background: #fff url(../img/bg3.png) center top repeat-x;
+    background: #aab185 url(../img/bg4.png) center top repeat;
+    background: #a3d594 url(../img/bg4.png) center top repeat;
     color: #010000;
     font: normal normal 10px/10px YanoneKaffeesatzLight, Tahoma, Arial, Helvetica, Verdana, sans-serif;
  }
     
     h1{ font-size: 2.9em; font-weight: normal;}
     h2{ font-size: 2.5em; font-weight: bold; line-height:105%;  }
-    h3{ font-size: 2em;color:#34302D }
+    h3{ font-size: 2em;color:#34302D; line-height:1em; }
     h4{ font-size: 1.7em; }
+    p {font-size: 1.5em;}
 
-/* Reusable classes ============================================================ */
-
-/* Left & Right alignment */
-/*.left{ float: left; }*/
-/*.right{ float: right; }*/
-
-/* The inside class provides consistent padding. To be used often! */
 .inside{ padding: 20px; margin-left:30px; }
 
-/* The fraction classes are useful for column lists */
 .half, .third, .quarter, .fifth, .sixth{ width: 100%; }
 .half li, .third li, .quarter li, .fifth li, .sixth li{ float: left; }
 .half li{ padding-right: 5%; width: 45% }
@@ -185,7 +175,6 @@ body{
 .quarter li{  padding-right: 5%; width: 20% }
 .fifth li{  padding-right: 5%; width: 15% }
 
-/* For when a <br /> just ain't enough */
 .separator{
     clear: both;
     float: left;
@@ -267,8 +256,15 @@ body{
         
     /* Footer */
     footer{
-        float: left;
-        width: 100%; }
+        float: right;
+        text-align:center;
+        background :url(../img/lrrr.png) right bottom no-repeat;
+        width: 100%; 
+        height:200px;
+        font-size: 1.5em;
+        
+
+}
     
 /* Project specifics =========================================================== */
 div#wrap {
@@ -332,7 +328,7 @@ h1{
     font: 60px YanoneKaffeesatzBold, Arial, sans-serif;
     color:#34302D;
 }
-    h1 span{ font: 32px NeutonLight, Geneva, sans-serif; letter-spacing: -1px;color:#86C543 }
+    h1 span{ font: 32px NeutonLight, Geneva, sans-serif; letter-spacing: -1px;color:#fff }
 
 .sbttn{
     -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -363,6 +359,11 @@ h1{
 
 .sbttn:active { position:relative; top:1px; }
 
+a#submit{
+    min-width:132px;
+    max-width:132px;
+}
+
 .chzn-container-single .chzn-single span, .chzn-container .chzn-results .active-result {
     font-size:16px;
 }
@@ -373,6 +374,7 @@ ul.normalp li {
     list-style-type:circle;
     margin-left:30px;
 }
+ol.normalp li { margin-left:30px; }
 
 ul#toc{
 float:right;
@@ -389,4 +391,9 @@ ul#toc li a:link {color: #000 ; text-decoration: none}
 ul#toc li a:active {color: #000; text-decoration: none}
 ul#toc li a:visited {color: #000; text-decoration: none}
 ul#toc li a:hover {color: #000; text-decoration: underline}
+
+.actualcontent#flatpage{
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+}
 

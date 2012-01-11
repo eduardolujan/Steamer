@@ -478,10 +478,21 @@ class Service(NagiosObject, models.Model):
         s.close()
         return ret
 
-    def get_effective_cmd(self):
-        #for word in self.check_command.command.command_line.split():
-        #    w+=' '+word
-        pass
+    def getcmd(self, hostname):
+        ret = ""
+        for word in self.check_command.command.command_line.split():
+            if word.startswith("$") and word.endswith("$") and hostname:
+                if word == "$HOSTADDRESS$":
+                    ret += ' %s' % Host.objects.get(host_name=hostname).address
+                elif word.startswith("$ARG"):
+                    num=int(word.replace("$ARG","").replace("$",""))
+                    ret+= '  %s' % self.check_command.paramline.split("!")[num]
+                else:
+                    ret += ' %s' % word.replace("$","")
+            else:
+                ret+=' '+word
+        return ret
+    
 
 
 

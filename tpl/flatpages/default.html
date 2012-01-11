@@ -2,9 +2,14 @@
         {% block title%}
             <title>{{ flatpage.title }}</title>
         {% endblock title%}
-        {% block content %}
+        {% block actualcontent %}
+        <div class="actualcontent" id="flatpage" >
+             <ul id="toc"> </ul> 
+        
             {{ flatpage.content }}
             <script type="text/javascript"> 
                 $("#toc").tableOfContents($(".actualcontent"), {startLevel:3});
             </script>
-        {% endblock content %}
+        </div>
+       {% endblock actualcontent%}
+

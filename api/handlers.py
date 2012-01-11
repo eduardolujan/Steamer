@@ -1,6 +1,7 @@
 import re
 from operator import or_
 
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from piston.handler import BaseHandler
 from piston.utils import rc
@@ -9,13 +10,32 @@ from doctor.djagios.models import Service, TimePeriod, Host, CheckCommand, Comma
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['ServiceHandler',  'TimePeriodHandler', 'ListServiceHandler',
+__all__ = ['ServiceHandler','ServiceActions', 'TimePeriodHandler', 'ListServiceHandler',
            'HostHandler', 'CheckCommandHandler','CommandHandler']
 
 class ServiceHandler(BaseHandler):
     allowed_methods = ('GET','PUT')
     model = Service   
-    fields = ('action_url', 'active_checks_enabled', 'check_command', 'check_freshness', 'check_interval', 'check_period', 'contact_groups', 'contacts', 'display_name', 'event_handler', 'event_handler_enabled', 'first_notification_delay', 'flap_detection_enabled', 'flap_detection_options', 'freshness_threshold', 'high_flap_threshold', 'host_name', 'host_name_n', 'hostgroup_name', 'hostgroup_name_n', 'icon_image', 'icon_image_alt', 'id', 'initial_state', 'is_volatile', 'low_flap_threshold', 'max_check_attempts', 'name', 'notes', 'notes_url', 'notification_interval', 'notification_options', 'notification_period', 'notifications_enabled', 'obsess_over_service', 'passive_checks_enabled', 'process_perf_data', 'register', 'retain_nonstatus_information', 'retain_status_information', 'retry_interval', 'service_description', 'servicegroups', 'stalking_options', 'use')
+    fields = ('action_url', 'active_checks_enabled', 'check_command', 'check_freshness', 'check_interval', 'check_period', 'contact_groups', 'contacts', 'display_name', 'event_handler', 'event_handler_enabled', 'first_notification_delay', 'flap_detection_enabled', 'flap_detection_options', 'freshness_threshold', 'high_flap_threshold', 'host_name', 'host_name_n', 'hostgroup_name', 'hostgroup_name_n', 'icon_image', 'icon_image_alt', 'id', 'initial_state', 'is_volatile', 'low_flap_threshold', 'max_check_attempts', 'name', 'notes', 'notes_url', 'notification_interval', 'notification_options', 'notification_period', 'notifications_enabled', 'obsess_over_service', 'passive_checks_enabled', 'process_perf_data', 'register', 'retain_nonstatus_information', 'retain_status_information', 'retry_interval', 'service_description', 'servicegroups', 'stalking_options', 'use', 'actions')
+    @classmethod
+    def actions(cls, service):
+        kw={'actionname':'getcmd', 'serviceid':service.pk, 'extra':'%(HOSTNAME)s'}
+        getcmd = reverse("service_actions", kwargs=kw) 
+        return {'get_cmd':{'method':'GET','uri':getcmd},}
+
+
+class ServiceActions(BaseHandler):
+    allowed_methods = ('GET')
+    actions=('getcmd')
+    def read(self, request, actionname, serviceid, extra):
+        if actionname in self.actions:
+            try:
+                action = getattr(Service.objects.get(pk=serviceid), actionname)
+                return {actionname:action(extra)}
+            except Service.DoesNotExist:
+                return rc.BAD_REQUEST
+        else :
+            return rc.BAD_REQUEST
 
 
 class ListServiceHandler(BaseHandler):

@@ -103,11 +103,13 @@
                 <section>
                     <div class="inside">
 
-                        <div class="actualcontent">
+                        {% block actualcontent %}
+                        <div class="actualcontent" >
                           <ul id="toc"> </ul>  
                           {% block content %}
-                          {% endblock %}
+                          {% endblock content%}
                         </div>
+                        {% endblock actualcontent%}
                     <div>
                     {% block pagination %}
                     {% endblock %}
@@ -117,6 +119,7 @@
                 </section>  
             </article>
         </div>
+        <footer> </footer>
     </body>
 </html>
 
