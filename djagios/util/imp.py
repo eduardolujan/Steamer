@@ -15,8 +15,8 @@ import chardet
 from django.db.models import NullBooleanField, ForeignKey, ManyToManyField
 from django.utils.simplejson import dumps, JSONEncoder
 
-from doctor.djagios import models
-from doctor.djagios.models import Transform
+from steamer.djagios import models
+from steamer.djagios.models import Transform
 
 
 import settings

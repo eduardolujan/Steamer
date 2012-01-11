@@ -24,7 +24,7 @@ class DocDashboard(Dashboard):
                     _('Nagios Config'),
                     column=1,
                     css_classes=('collapse open',),
-                    models=('doctor.djagios.*',)
+                    models=('steamer.djagios.*',)
                 )
             ]
         ))
@@ -35,7 +35,7 @@ class DocDashboard(Dashboard):
             collapsible=True,
             column=1,
             css_classes=('collapse closed',),
-            exclude=('doctor.djagios.*','django.contrib.auth.*',),
+            exclude=('steamer.djagios.*','django.contrib.auth.*',),
         ))
         
         # append an app list module for "Administration"

@@ -27,7 +27,7 @@ from fabric.contrib.project import rsync_project
 from django.db.models import Q
 
 import settings
-from doctor.djagios.models import *
+from steamer.djagios.models import *
 
 logger = logging.getLogger(__name__)
 

@@ -3,7 +3,7 @@ import StringIO
 
 from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
-from doctor.djagios.util import Syncer
+from steamer.djagios.util import Syncer
 
 
 class Command(BaseCommand):

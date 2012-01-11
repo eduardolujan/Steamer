@@ -26,7 +26,7 @@ from django import forms
 
 from uuidfield import UUIDField
 
-from doctor.djagios.exceptions import ParseError, InvalidObjectError
+from steamer.djagios.exceptions import ParseError, InvalidObjectError
 
 from settings import NAGIOS_PREFIX as PREFIX 
 logger = logging.getLogger(__name__)

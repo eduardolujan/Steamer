@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.shortcuts import redirect
 
-from doctor.webapp import views
-from doctor import settings
+from steamer.webapp import views
+from steamer import settings
 
 from django.contrib import admin
 admin.autodiscover()
@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     (r'^grappelli/', include('grappelli.urls')),
 
     #Rest
-    (r'^api/', include('doctor.api.urls')),
+    (r'^api/', include('steamer.api.urls')),
 
     #WebApp
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.png'}),

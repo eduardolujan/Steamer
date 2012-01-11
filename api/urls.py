@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
 
-from doctor.api.handlers import *
+from steamer.api.handlers import *
 
 service_h = Resource(ServiceHandler)
 list_service_h = Resource(ListServiceHandler)

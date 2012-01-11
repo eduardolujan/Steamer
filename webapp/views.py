@@ -26,8 +26,8 @@ from fabric.context_managers import hide
 from fabric.network import disconnect_all
 from fabric.api import run, local, env
 
-from doctor.djagios.models import *
-from doctor.djagios.util import Syncer
+from steamer.djagios.models import *
+from steamer.djagios.util import Syncer
 
 
 def _sanitize_alias(name):

@@ -22,7 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.flatpages.admin import FlatPageAdmin, FlatpageForm
 from django.contrib.flatpages.models import FlatPage
 
-from doctor.djagios.models import  *
+from steamer.djagios.models import  *
 
 
 
