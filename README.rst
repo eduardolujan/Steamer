@@ -5,7 +5,7 @@ Steamer is a tool for configuring nagios instances, it began as a fork of the `D
 
 **It is currently under heavy development, not yet documented, and _not yet ready for production_.**
 
-Steamer was conceived for managing `Merlin-aware`<http://www.op5.org/community/plugin-inventory/op5-projects/merlin>`_ nagios clusters, it aims towards:
+Steamer was conceived for managing `Merlin-aware <http://www.op5.org/community/plugin-inventory/op5-projects/merlin>`_ nagios clusters, it aims towards:
 
 * A rewritten import tool
 * Multiple nagios instances support
