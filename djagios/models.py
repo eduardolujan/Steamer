@@ -1254,33 +1254,8 @@ class NagiosCfg(NagiosObject, models.Model):
         s.close()
         return ret
 
-####################################################
-# Models for the website and the configuration help.
-####################################################
+#Api validation Forms
 
-class HostTemplate(models.Model):
-    """:class:`HostTemplate` is a helper class for Djagios website.
-    This class will allow us to assign service, servicegroups, contact
-    and contactgroups to the Host.
-    These can be created by the admins, and only selected by the users.
-    obsolete!!!!!
-    """
-    name = models.CharField(max_length=255, unique=True)
-    use = models.ForeignKey(Host, related_name='HT_use_H')
-    services = models.ManyToManyField(Service, blank=True,null=True)
-    contacts = models.ManyToManyField(Contact, blank=True,null=True)
-    contact_groups = models.ManyToManyField(ContactGroup, blank=True,null=True)
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return self.__str__()
-
-class HostTemplateForm(forms.ModelForm):
-    pass
-    class Meta:
-        model = HostTemplate
 
 class HostForm(forms.Form):
     name = forms.CharField(label='Server Name', max_length=50)

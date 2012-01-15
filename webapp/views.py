@@ -30,9 +30,6 @@ from steamer.djagios.models import *
 from steamer.djagios.util import Syncer
 
 
-def _sanitize_alias(name):
-    return name.replace(' ', '_').lower()
-
 @login_required
 def home(request):
     t = loader.get_template('%s/home.html'%settings.DJAGIOS_THEME)
@@ -79,34 +76,6 @@ def delete_host(request):
 def add_host_to_service(request):
     return _add_host_to_service(request, False)
 
-@permission_required('djagios.change_host', login_url='/login')
-def add_host_template_to_service(request):
-    return _add_host_to_service(request, True)
-
-def _add_host_to_service(request, template):
-    if request.method == 'POST':
-        form=None
-        if template:
-            form=HostTemplateToServiceForm(request.POST)
-        else:
-            form = HostToServiceForm(request.POST)
-        if form.is_valid():
-            s = form.cleaned_data['service']
-            h = form.cleaned_data['host']
-            s.host_name.add(h)
-            s.save()
-            return HttpResponseRedirect('/')
-    else:
-        form=None
-        t=None
-        if template:
-            form = HostTemplateToServiceForm()
-            t = loader.get_template('%s/hosttemplateservice.html'%settings.DJAGIOS_THEME)
-        else:
-            form = HostToServiceForm()
-            t = loader.get_template('%s/hostservice.html'%settings.DJAGIOS_THEME)
-    c = RequestContext(request, {'form':form,})
-    return HttpResponse(t.render(c))
 
 @permission_required('djagios.change_service', login_url='/login')
 def remove_host_from_service(request):

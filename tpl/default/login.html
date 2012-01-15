@@ -3,7 +3,14 @@
 {% block header %}
 <script type="text/Javascript" charset="utf-8">
     $(document).ready(function(){ 
-        $("#submit").click( function() { $("#loginform").submit() })
+        //bind the click
+        $("#submit").click( function() { $("#loginform").submit() });
+        var code = null;
+        //bind the intro key
+        $("#id_password").keypress(function(e){
+                code = (e.keyCode ? e.keyCode : e.which); if (code == 13) $("#loginform").submit();
+            });
+
     });
 </script>
 {% endblock header%}

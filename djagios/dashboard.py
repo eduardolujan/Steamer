@@ -78,11 +78,6 @@ class DocDashboard(Dashboard):
                     'url': 'http://code.google.com/p/django-grappelli/',
                     'external': True,
                 },
-                {
-                    'title': _('Jira UOC'),
-                    'url': 'http://jira.uoc.es/',
-                    'external': True,
-                },
             ]
         ))
         
