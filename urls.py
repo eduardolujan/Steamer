@@ -1,5 +1,3 @@
-from django.contrib.auth.decorators import login_required, permission_required
-from django.views.generic import TemplateView
 from django.conf.urls.defaults import patterns, include, url
 from django.shortcuts import redirect
 
@@ -23,13 +21,11 @@ urlpatterns = patterns('',
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.png'}),
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': '%s/login.html' % THEME}),
     (r'^logout', 'django.contrib.auth.views.logout_then_login', {'login_url': '/login'},),
-    (r'^hosttemplate/add', views.add_host_template),
-    (r'^host/add', views.add_host),
-    (r'^host/delete', views.delete_host),
-    (r'^service/removehost', views.remove_host_from_service),
-    #..
-    (r'^service/addhost', permission_required('djagios.change_host')(
-        TemplateView.as_view(template_name="%s/hostservice.html" % THEME))),
+
+    (r'^host/add', views.SteamerTpl.as_view(template_name="%s/hostmanage.html" % THEME )),
+    (r'^host/delete', views.SteamerTpl.as_view(template_name="%s/hostmanage.html" % THEME, extra={'remove':True} )), 
+    (r'^service/removehost', views.SteamerTpl.as_view(template_name="%s/hostservice.html" % THEME, extra={'remove':True} )),
+    (r'^service/addhost', views.SteamerTpl.as_view(template_name="%s/hostservice.html" % THEME)),
     (r'^json/push$',views.push_and_reload ),
     (r'^$', views.home),
 )

@@ -5,17 +5,31 @@ from operator import or_
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db import transaction
+from django.utils import simplejson as json
 from piston.handler import BaseHandler
-from piston.utils import rc
+from piston.utils import rc_factory
 from piston.utils import translate_mime
 from piston.utils import MimerDataException
+from piston.utils import FormValidationError
 
 from steamer.djagios.models import *
+
+from steamer.api.forms import RemoveHostForm
+
 logger = logging.getLogger(__name__)
 
 __all__ = ['ServiceHandler', 'ServiceActions', 'TimePeriodHandler',
            'ListServiceHandler', 'HostHandler', 'CheckCommandHandler',
            'CommandHandler', 'ManageHostServices']
+
+
+class factory(rc_factory):
+    CODES = dict(rc_factory.CODES.items() + [('UNPROCESSABLE', ('', 422))]) 
+
+rc = factory() 
+
+
+
 
 
 class ServiceHandler(BaseHandler):
@@ -151,7 +165,7 @@ class TimePeriodHandler(BaseHandler):
 
 
 class HostHandler(BaseHandler):
-    allowed_methods = ('GET', 'PUT', 'POST')
+    allowed_methods = ('GET', 'PUT', 'POST', 'DELETE')
     model = Host
     exclude = ()
 
@@ -178,8 +192,30 @@ class HostHandler(BaseHandler):
             return Host.objects.get(pk=hostid)
         else:
             return Host.objects.all()
-
-
+   
+    def delete(self, request):
+        try:
+            translate_mime(request)
+            if request.content_type and request.data.get('host'):
+                form = RemoveHostForm(request.data)
+                if form.is_valid():
+                    try:
+                        h = Host.objects.get(pk=request.data.get('host'))
+                        h.delete()
+                        return rc.DELETED
+                    except Host.DoesNotExist:
+                        return rc.BAD_REQUEST
+                else:
+                    #this is how we tell jQuery about the form errors.
+                    resp = rc.UNPROCESSABLE 
+                    resp.write(dict((k, map(unicode, v))
+                       for (k,v) in form.errors.iteritems()))
+                    return resp
+            else:
+                return rc.BAD_REQUEST
+        except MimerDataException:
+            return rc.BAD_REQUEST
+                
 class CheckCommandHandler(BaseHandler):
     allowed_methods = ('GET',)
     model = CheckCommand

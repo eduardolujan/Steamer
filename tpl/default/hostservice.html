@@ -35,17 +35,20 @@ $(document).ready(function(){
 {% block content %}
 {% if remove %}
 <form method="POST" id="hostservice" action="/service/removehost">
+    {% csrf_token %}
+        <table>
+        {{ forms.remove_host_from_service }}
+        </table>
+    <a id="submit" href="#" class="sbttn">Remove service from host</a>
+
 {% else %}
 <form method="POST" id="hostservice" action="/service/addhost">
-{% endif %}
 {% csrf_token %}
     <table>
-        {{ form }}
+        {{ forms.add_host_to_service }}
+        
     </table>
-    {% if remove %}
-    <a id="submit" href="#" class="sbttn">Remove service from host</a>
-    {% else %}
     <a id="submit" href="#" class="sbttn">Add service to host</a>
-    {% endif %}
+{% endif %}
 </form>
 {% endblock content %}

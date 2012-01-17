@@ -1254,33 +1254,3 @@ class NagiosCfg(NagiosObject, models.Model):
         s.close()
         return ret
 
-#Api validation Forms
-
-
-class HostForm(forms.Form):
-    name = forms.CharField(label='Server Name', max_length=50)
-    address = forms.CharField(label='Servers Address (dns or IP)', max_length=50)
-    template = forms.ModelChoiceField(label='Template', queryset=Host.objects.filter(register=False).order_by('name'))
-
-class HostToServiceForm(forms.Form):
-    service = forms.ModelChoiceField(label='Service', queryset=Service.objects.exclude(register=False).order_by('service_description'))
-    host = forms.ModelChoiceField(label='Host', queryset=Host.objects.exclude(register=False).order_by('host_name'))
-
-class HostFromServiceForm(forms.Form):
-    host = forms.ModelChoiceField(label='Host', queryset=Host.objects.exclude(register=False).order_by('host_name'))
-    service = forms.ModelChoiceField(Service.objects.exclude(register=False), widget=forms.Select(attrs={'disabled': 'True'}, choices=(('-1', 'Select Host'),)))
-
-class HostTemplateToServiceForm(forms.Form):
-    service = forms.ModelChoiceField(label='Service', queryset=Service.objects.exclude(register=False).order_by('service_description'))
-    host = forms.ModelChoiceField(label='Host', queryset=Host.objects.exclude(register=True).order_by('host_name'))
-
-class HostTemplateFromServiceForm(forms.Form):
-    host = forms.ModelChoiceField(label='Host', queryset=Host.objects.exclude(register=False).order_by('host_name'))
-    service = forms.ModelChoiceField(Service.objects.exclude(register=True), widget=forms.Select(attrs={'disabled': 'True'}, choices=(('-1', 'Select Host'),)))
-
-class HostDeleteForm(forms.Form):
-    host = forms.ModelChoiceField(label='Host', queryset=Host.objects.exclude(register=False).order_by('host_name'))
-    sure = forms.BooleanField(label='Check if you are sure', required=True)
-
-
-

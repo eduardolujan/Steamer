@@ -57,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
 )
 
@@ -79,6 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django_evolution',
     'steamer.djagios',
+    'debug_toolbar',
 )
 
 
@@ -108,3 +110,4 @@ LOGGING = {
         'steamer.api.handlers': { 'handlers': ['console'], 'level': 'DEBUG', 'propagate': True, },
     }
 }
+INTERNAL_IPS = ('127.0.0.1',)

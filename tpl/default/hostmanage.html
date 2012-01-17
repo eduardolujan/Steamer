@@ -1,0 +1,47 @@
+{% extends "default/index.html" %}
+
+{% block header %}
+    <script type="text/Javascript" charset="utf-8"> 
+        $(document).ready(function(){ $('select').chosen(); }); 
+    </script>
+{% endblock header %}
+
+{% block content %}
+{% if remove %}
+    <form id="hostform"  method="POST" action="/api/host/">
+        <ul>
+        {% for field in forms.remove_host %}
+            <div style="margin-right:5px;max-width:40%;">
+                <span class="error">{{ field.errors }}</span>
+                    {{ field.label_tag }}:
+            </div>
+            <div style="max-width:40%;right:0; display:block;">
+                {{ field }}
+            </div>
+        {% endfor %}
+        </ul>
+        <br/>
+        <a id="submit" href="#" class="sbttn" 
+            onclick='$.restifyForm($("#hostform"), "DELETE", function(){ window.location = "?"})'>Remove</a>
+
+{% else %}
+    <form id="hostform"  method="POST" action="/api/host/">
+        <ul>
+        {% for field in forms.add_host %}
+            <div style="margin-right:5px;max-width:40%;">
+                <span class="error">{{ field.errors }}</span>
+                    {{ field.label_tag }}:
+            </div>
+            <div style="max-width:40%;right:0; display:block;">
+                {{ field }}
+            </div>
+        {% endfor %}
+        </ul>
+        <br/>
+        <a id="submit" href="#" class="sbttn" 
+            onclick='$.restifyForm($("#hostform"), "POST", function(){ window.location = "/service/addhost"})'>Add to Nagios</a>
+{% endif %}
+
+    </form>
+
+{% endblock content %}
