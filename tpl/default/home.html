@@ -31,7 +31,7 @@ $(function(){
 <select id='direct_host' class="chosen">
     <option value="" selected="selected">---------</option>
 {% for host in hlist %}
-    <option value='{{host.id}}'>{{ host }} </option>
+    <option value='{{host.id}}'>{{ host.host_name }} </option>
 {% endfor %}
 </select>
 </div>

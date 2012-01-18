@@ -28,10 +28,6 @@ class factory(rc_factory):
 
 rc = factory() 
 
-
-
-
-
 class ServiceHandler(BaseHandler):
     allowed_methods = ('GET', 'PUT')
     model = Service
@@ -107,11 +103,15 @@ class ManageHostServices(BaseHandler):
     allowed_methods = ('PUT', 'DELETE')
 
     def update(self, request, serviceid=None):
+        if not serviceid:
+            serviceid = request.data.get('service')
         return self._manage(request, serviceid=serviceid, action='add')
 
     def delete(self, request, serviceid=None):
         try:
             translate_mime(request)
+            if not serviceid:
+                serviceid = request.data.get('service')
             return self._manage(request, serviceid=serviceid, action='remove')
         except MimerDataException:
             return rc.BAD_REQUEST
@@ -119,12 +119,12 @@ class ManageHostServices(BaseHandler):
     @transaction.commit_manually
     def _manage(self, request, serviceid=None, action='add'):
         allowed = ['host_name', 'host_name_n', 
-                'hostgroup_name', 'hostgroup_name_n']
+                'hostgroup_name', 'hostgroup_name_n', 'host']
         if serviceid and request.content_type:
             data = request.data
             try:
                 for key in allowed:
-                    if isinstance(data.get(key), list) and \
+                    if isinstance(data.get(key), (list, basestring)) and \
                         len(data.get(key)) > 0 :
                         try:
                             if key.startswith('host_name'):
@@ -133,21 +133,32 @@ class ManageHostServices(BaseHandler):
                             elif key.startswith('hostgroup_name'):
                                 what = HostGroup.objects.filter(
                                             hostgroup_name__in=data[key]).all()
+                            elif key == 'host':
+                                what = Host.objects.get(pk=data[key])
+                                key = 'host_name'
                             svc = Service.objects.get(pk=serviceid)
                             attr = getattr(svc, key) 
                             action = getattr(attr, action)
-                            action(*what)
+                            if isinstance(what, Host):
+                                action(what)
+                            else:
+                                action(*what)
                             svc.save()
-                        except Host.DoesNotExist:
-                            return rc.BAD_REQUEST
+                            logger.debug(attr.all())
+                        except Host.DoesNotExist, e:
+                            resp=rc.BAD_REQUEST
+                            resp.write('  %s' % e)
+                            return resp
 
                 transaction.commit()
                 return rc.ALL_OK
+
             except Exception, e:
                 transaction.rollback()
                 logger.error(e)
                 return rc.BAD_REQUEST
         else:
+            transaction.rollback()
             return rc.BAD_REQUEST
 
 class TimePeriodHandler(BaseHandler):

@@ -24,7 +24,7 @@ DJAGIOS_IMPORT_OBJECTS = ('NagiosCfg', 'TimePeriod', 'Command', 'Contact',
 NAGIOS_PREFIX="/opt/local/nagios/"
 STATIC_ROOT = PROJECT_ROOT + '/staticfiles/' 
 STATIC_URL = '/static/'
-GRAPPELLI_ADMIN_TITLE="The Nagios Config Creature from the Black Lagoon."
+GRAPPELLI_ADMIN_TITLE="Steamer admin"
 GRAPPELLI_INDEX_DASHBOARD = 'steamer.djagios.dashboard.DocDashboard'
 
 
