@@ -1,8 +1,7 @@
 
 from django import forms
 
-from steamer.djagios.models import Host
-from steamer.djagios.models import Service
+from steamer.djagios.models import Host, Service, NagiosCfg
 
 class RemoveHostFromServiceForm(forms.Form):
     host = forms.ModelChoiceField(
@@ -27,10 +26,12 @@ class AddHostForm(forms.Form):
     address = forms.CharField(label='Server Address', max_length=50)
     use = forms.ModelChoiceField(label='Template', 
             queryset=Host.objects.filter(register=False).order_by('name'))
+    nagios_server = forms.ModelChoiceField(label='Nagios Server', 
+            queryset=NagiosCfg.objects.all().order_by('server_name'))
 
 class RemoveHostForm(forms.Form):
     host = forms.ModelChoiceField(label='Host', 
             queryset=Host.objects.exclude(register=False).order_by('host_name'))
-    sure = forms.BooleanField(label='Check if you are sure', required=True)
+    sure = forms.BooleanField(label='Yup, I know this can brake stuff..', required=True)
 
 
