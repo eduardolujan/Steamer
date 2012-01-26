@@ -241,7 +241,11 @@ a#submit{
 }
 .normalp{ 
     text-indent: 40px;
+<<<<<<< HEAD
     font: 18px YanLight, Geneva, sans-serif; 
+=======
+    font: 18px NeutonExtraLight, Geneva, sans-serif; 
+>>>>>>> 39574509e4518cc41c020ea53a713ee97109f9de
 }
 .fancy{ 
     font: 14px sans-serif; 
