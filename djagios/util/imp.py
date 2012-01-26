@@ -6,6 +6,7 @@
 import uuid
 import re
 import os
+import sys
 import logging
 import unicodedata
 import shelve
@@ -28,7 +29,7 @@ logger = logging.getLogger(__name__)
 The Idea is fairly simple: don't make an exceptions based import script, treat all
 the objects the same way if possible, custom & arcane twicking must live in the model
 as class methods. Theres an abtract class that defines the default ones, that can be
-overriden and there transormation routines will try to load field-specific and 
+overriden and the transormation routines will try to load field-specific and 
 model-specific ones.
 
 It is more or less like this: 
@@ -112,12 +113,13 @@ class Hashable(dict):
         return hash(tuple(sorted(self.items())))
 
 class DjagiosConfigParser(object):
+    nagios_etc_root="/opt/local/nagios/etc"
     _cache={}
     _configs=set()
 
     def __init__(self, **kwargs):
         if kwargs.get('debug'):
-            #this is mainly for postmorten debugging.
+            #this is mainly for postmortem debugging.
             self._cache = shelve.open(".%s.djagios.debug" % uuid.uuid4().hex)
         self._cache['nagioscfg']=[{},]
 
@@ -133,10 +135,20 @@ class DjagiosConfigParser(object):
             fstring = fd.read()
             #This ain't fast, it tries to save your strings while downgrading unicode to
             #ascii, ex: José -> Jose 
-            fstring = str(strip_accents(
-                         unicode(fstring, 
-                                chardet.detect(fstring).get('encoding')
-                                )).encode('ascii','ignore'))
+            try:
+                fstring = str(strip_accents( unicode(fstring, 
+                                    chardet.detect(fstring).get('encoding')
+                                    )).encode('ascii','ignore'))
+            except UnicodeDecodeError as detail:
+                def_enc = settings.DJAGIOS_IMPORTENCODING
+                logger.error('while reading %s \n, retrying with %s' % (filename, def_enc))
+                logger.debug(detail)
+                try:
+                    fstring = str(strip_accents( unicode(fstring, def_enc)).encode('ascii','ignore'))
+                except UnicodeDecodeError as detail:
+                    logger.error('sorry, couldn\'t make it, %s' % detail)
+                    sys.exit(1)
+
             lines = fstring.split("\n")
             #clear half line comments
             lines = map(cleanse_pullout_coments, lines)
@@ -147,6 +159,7 @@ class DjagiosConfigParser(object):
 
             if main:
                 #The main config file
+                self.main_file = filename
                 for line in lines:
                     splitted=line.split("=", 1)
                     if splitted[0] == 'cfg_dir' or splitted[0] == 'cfg_file': 
@@ -183,7 +196,12 @@ class DjagiosConfigParser(object):
 
     def _get_includes(self, path):
         '''Returns a set with the all cfg files that should be read.'''
+
+        #Relativize the path to reflect the fs on the importing machine. 
+        relative_path = "/".join(self.main_file.strip("/").split("/")[:-1])
+        path = "/" + path.replace(self.nagios_etc_root, relative_path, 1)
         logger.debug('Looking for includes in: %s' % path)
+
         if os.path.isfile(path):
             return set([path])
         else:
@@ -196,6 +214,8 @@ class DjagiosConfigParser(object):
     def parse(self, cfgfile):
         '''Loads all the config to the cache, and tries to sort the hashable dicts in the order
         they should be inserted.'''
+
+        cfgfile = os.path.join(settings.DJAGIOS_IMP_DIR, cfgfile)
         self.read_file(cfgfile, main=True)
         for eachfile in self._configs:
             self.read_file(eachfile)
@@ -241,9 +261,12 @@ class DjagiosConfigParser(object):
         '''For debugging.'''
         return dumps(obj, cls=DjagiosEncoder, indent=4)
 
-    def load_to_db(self, filename, server_name):
+    def load_to_db(self, filename, server_name, replace=None):
         '''This is the main importing loop, we're going to loop over the cache
-        trnslate the dict and feed the models with that data.'''
+        translate the dict and feed the models with that data.'''
+
+        if replace:
+            self.nagios_etc_root=replace.rstrip("/")
 
         self.server_name=server_name
         logger.info('Loading nagios cfg to memory..')

@@ -2,8 +2,8 @@ import os
 from django.conf import global_settings as default_settings
 from custom_settings import *
 
+MANAGERS = ADMINS
 
-PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 TEMPLATE_DEBUG = DEBUG = True
 
 
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
 )
 
@@ -78,9 +78,9 @@ INSTALLED_APPS = (
     'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
-    'django_evolution',
+    #'django_evolution',
     'steamer.djagios',
-    'debug_toolbar',
+    #'debug_toolbar',
 )
 
 
@@ -107,7 +107,9 @@ LOGGING = {
         'django.request': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
         'steamer.djagios.models': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
         'steamer.djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
+        'djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
         'steamer.api.handlers': { 'handlers': ['console'], 'level': 'DEBUG', 'propagate': True, },
     }
 }
 INTERNAL_IPS = ('127.0.0.1',)
+DEBUG_TOOLBAR_CONFIG = { 'INTERCEPT_REDIRECTS': False,}

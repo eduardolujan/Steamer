@@ -188,8 +188,21 @@ class HostHandler(BaseHandler):
                     data['use'] = Host.objects.get(id=data['use'])
                 except Host.DoesNotExist:
                     return rc.BAD_REQUEST
+            if data.get('nagios_server'):
+                try:
+                    if isinstance(data['nagios_server'], basestring):
+                        servers = NagiosCfg.objects.get(pk=data['nagios_server'])
+                        add_servers = data.pop('nagios_server')
+                    else:
+                        servers =  NagiosCfg.objects.filter(pk__in=data['nagios_server'])
+                        add_servers = data.pop('nagios_server')
+                except NagiosCfg.DoesNotExist:
+                    return rc.BAD_REQUEST
+
             h = Host(**data)
             h.save()
+            if add_servers:
+                h.nagios_server.add(servers)
             resp = rc.CREATED
             resp.write(" %s" % h.id)
             return resp

@@ -1,8 +1,10 @@
+import os 
 
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 ADMINS = (('Admin', 'admin@email'),)
-MANAGERS = ADMINS
 TIME_ZONE = 'Europe/Madrid'
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'steamer.db'}}
-
-#You may run "python manage.py genkey" to generate this value.
-SECRET_KEY=''
+DJAGIOS_IMP_DIR = PROJECT_ROOT + "/cfg/import"
+DJAGIOS_EXP_DIR = PROJECT_ROOT + "/cfg/export"
+DATABASES = {'default': {
+                'ENGINE': 'django.db.backends.sqlite3', 
+                'NAME': '%s/db/steamer.db' % PROJECT_ROOT } }

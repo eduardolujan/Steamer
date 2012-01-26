@@ -22,7 +22,6 @@ import StringIO
 
 
 class Command(BaseCommand):
-    args = 'path'
     help = 'Imports nagios configuration to db.'
 
     option_list = BaseCommand.option_list + (
@@ -31,18 +30,28 @@ class Command(BaseCommand):
                     action="store", 
                     dest="server_name",
                     default='localhost',
-                    help="Submit the server name for the config"),
-        make_option("-p", 
-                    "--path",
+                    help="Server name for this nagios instance."),
+        make_option("-c", 
+                    "--cfgfile",
                     action="store", dest="path",
-                    default='/etc/nagios/nagios.cfg',
-                    help="Path of the main configuration file."),
+                    default='nagios.cfg',
+                    help="Path of the main configuration file relative to the" +\
+                            " import directory."),
+        make_option("-o", 
+                    "--original-path",
+                    action="store", dest="origpath",
+                    default=None,
+                    help="Path where the original main config file was without" +\
+                            "the trailing file name, ej: /usr/local/nagios/etc/"),
         )
  
     def handle(self, *args, **options):
+        #redirect the logger output stream to the command's stdout.
         log_handler = logging.StreamHandler(self.stdout)
         logging.root.addHandler(log_handler)
         logging.root.setLevel(logging.INFO)
         cp=DjagiosConfigParser()
-        cp.load_to_db(options['path'], options['server_name'])
+        cp.load_to_db(options['path'], 
+                      options['server_name'], 
+                      replace=options['origpath'])
         

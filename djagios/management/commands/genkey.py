@@ -27,4 +27,5 @@ class Command(NoArgsCommand):
 
     def handle_noargs(self, **options):
         ch = letters + digits + punctuation
-        return ''.join([choice(ch) for i in range(50)])+"\n"
+        s = ''.join([choice(ch) for i in range(50)])
+        self.stdout.write("SECRET_KEY='%s'" % s.replace("'", "\\'"))

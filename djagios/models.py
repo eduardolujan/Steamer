@@ -28,7 +28,7 @@ from uuidfield import UUIDField
 
 from steamer.djagios.exceptions import ParseError, InvalidObjectError
 
-from settings import NAGIOS_PREFIX as PREFIX 
+from steamer.settings import NAGIOS_PREFIX as PREFIX 
 logger = logging.getLogger(__name__)
 
 HOST_STATES = (
