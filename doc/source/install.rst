@@ -18,6 +18,7 @@ Edit your database settings:
 
 :file: `custom_settings.py`
 
+
 .. code-block:: python
 
     import os
@@ -31,6 +32,8 @@ Edit your database settings:
                     'ENGINE': 'django.db.backends.sqlite3', 
                     'NAME': '%s/db/steamer.db' % PROJECT_ROOT } }
     
+
+.. note:: Take a look `here <https://docs.djangoproject.com/en/1.3/ref/settings/#std:setting-DATABASES>`_ for information on your specific db backend.
 
 
 Initiate the database,  collect the app's `static files <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/>`_ for the httpd server, and generate a seed for django ::
@@ -46,7 +49,7 @@ Deploy the app, you may want to refer to the `django docs <https://docs.djangopr
     >cp misc/apache_sample /whatever/your/conf/is && vi !$
 
 .. warning::
-        Don't run the django site as the apache user especially if it is shared with other apps and steamer has ssh access to your services, if using mod_wsgi run the app as a daemon process and set the `user directive <http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIDaemonProcess>`_ ,  please see **securing steamer** for more info on the subject.   
+        Don't run the django site as the apache user especially if it is shared with other apps and steamer has ssh access to your services, if using mod_wsgi run the app as a daemon process and set the `user directive <http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIDaemonProcess>`_ ,  please see :doc:`sec` for more info on the subject.   
     
 
 That's it, restart your apache and you should be done.

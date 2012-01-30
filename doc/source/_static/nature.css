@@ -197,6 +197,7 @@ div.highlight{
 div.note {
     background-color: #eee;
     border: 1px solid #ccc;
+    border-radius:3px;
 }
  
 div.seealso {
@@ -209,8 +210,9 @@ div.topic {
 }
  
 div.warning {
-    background-color: #ffe4e4;
-    border: 1px solid #f66;
+    background-color: #ff9;
+    border: 1px solid #ccc;
+    border-radius:3px;
 }
  
 p.admonition-title {
@@ -231,6 +233,7 @@ pre {
     margin: 1.5em 0 1.5em 0;
     -webkit-box-shadow: 1px 1px 1px #d8d8d8;
     -moz-box-shadow: 1px 1px 1px #d8d8d8;
+    border-radius: 3px;
 }
  
 tt {
@@ -257,6 +260,15 @@ li{
     font-family: "YanReg", Arial, sans-serif;
     font-size: 1.1em;
 }
+
+ul.smalllist.simple li {
+    font-family: "YanLight", Arial, sans-serif;
+    font-size: 1em
+}
+
+ul.nobullet li{ list-style: none; }
+ul.disc li{ list-style: disc; }
+ul.circle li{ list-style: disc; }
 
 .popuplarge {
     display:none;
