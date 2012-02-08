@@ -1,0 +1,5 @@
+*.db
+*.sqlite
+/cfg/import/*
+/cfg/import/*
+/doc/build/

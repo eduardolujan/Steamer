@@ -1,6 +1,9 @@
 import os
 from django.conf import global_settings as default_settings
-from custom_settings import *
+try:
+    from custom_settings import *
+except:
+    pass
 
 MANAGERS = ADMINS
 

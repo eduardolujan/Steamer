@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath('../'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 #extensions = ['sphinx.ext.todo', 'flatpages']
-extensions = ['sphinx.ext.todo', 'sphinxcontrib.spelling']
+extensions = ['sphinx.ext.todo', 'sphinxcontrib.spelling', 'sphinxcontrib.httpdomain']
 
 spelling_lang='en_US'
 spelling_show_suggestions=False

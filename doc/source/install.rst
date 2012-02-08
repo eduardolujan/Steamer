@@ -6,7 +6,7 @@ You will need to create a new virtual environment as a **non-root user**, if you
 
     > virtualenv app 
     > cd app && . bin/activate
-    > pip install django django-piston django-grappelli fabric django-uuidfield
+    > pip install django django-piston django-grappelli fabric django-uuidfield chardet
 
 
 Grab the code from github and name the root "steamer" ::

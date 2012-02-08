@@ -5,7 +5,7 @@ You can model your data from scratch, or you can import it as follows:
 
 |First| Copy your nagios "etc" directory into the import directory and import through the management command::
     
-    > scp -P root@nagios1:/opt/local/nagios/etc  cfg/import/nagios1 
+    > scp -r root@nagios1:/opt/local/nagios/etc  cfg/import/nagios1 
     > ./manage.py import -s nagios1 -c nagios1/nagios.cfg -o /opt/local/nagios/etc/
     
 The **-o** argument is the original path for the main config file, you mus ensure that all nagios cfg includes are inside that "etc" directory.

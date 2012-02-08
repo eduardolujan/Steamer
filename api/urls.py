@@ -1,16 +1,19 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
+from piston.authentication import HttpBasicAuthentication 
 
 from steamer.api.handlers import *
-from steamer.api.auth import DjangoAuthentication
+from steamer.api.auth import DjangoAuthentication 
+from steamer.api.auth import MultiAuthentication 
 
-auth = DjangoAuthentication()
+auth = { 'authentication': MultiAuthentication([HttpBasicAuthentication(), DjangoAuthentication()])}
 
-service_h = Resource(ServiceHandler, authentication=auth)
-list_service_h = Resource(ListServiceHandler, authentication=auth)
-host_h = Resource(HostHandler, authentication=auth)
-service_actions = Resource(ServiceActions, authentication=auth)
-manage_host_services = Resource(ManageHostServices, authentication=auth)
+
+service_h = Resource(ServiceHandler, **auth)
+list_service_h = Resource(ListServiceHandler, **auth)
+host_h = Resource(HostHandler, **auth)
+service_actions = Resource(ServiceActions, **auth)
+manage_host_services = Resource(ManageHostServices, **auth)
 
 urlpatterns = patterns('',
     url(r'^service/actions/(?P<actionname>\w+)/(?P<serviceid>\w+)/(?P<extra>.*)/$', service_actions, None, 'service_actions',),

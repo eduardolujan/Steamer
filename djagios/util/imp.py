@@ -136,7 +136,8 @@ class DjagiosConfigParser(object):
             #This ain't fast, it tries to save your strings while downgrading unicode to
             #ascii, ex: José -> Jose 
             try:
-                fstring = str(strip_accents( unicode(fstring, 
+                if len(fstring) > 0: 
+                    fstring = str(strip_accents( unicode(fstring, 
                                     chardet.detect(fstring).get('encoding')
                                     )).encode('ascii','ignore'))
             except UnicodeDecodeError as detail:
