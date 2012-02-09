@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db import transaction
 from django.utils import simplejson as json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from piston.handler import BaseHandler
 from piston.utils import rc_factory
 from piston.utils import translate_mime
@@ -28,7 +29,47 @@ class factory(rc_factory):
 
 rc = factory() 
 
-class ServiceHandler(BaseHandler):
+
+class SteamHandler(BaseHandler):
+    '''A handler with optional pagination suport.'''
+    summary_fields = None
+
+    def read (self, request, *args, **kwargs):
+        logger.debug('init read ..')
+        pkfield = self.model._meta.pk.name
+        
+        if request.GET.get('p') and request.GET.get('l'):
+            page = int(request.GET.get('p', 1))
+            lim =  int(request.GET.get('l', 20))
+
+            qs = self.queryset(request).filter(*args, **kwargs).values(*self.summary_fields)
+            p = Paginator(qs, lim)
+
+            try:
+                result = p.page(page)
+            except PageNotAnInteger:
+                result = p.page(1)
+            except EmptyPage:
+                result = p.page(p.num_pages)
+
+            return {'pagination': {
+                        'pages':p.num_pages,
+                        'per_page':lim,
+                        'has_next':result.has_next(),
+                        'has_previous':result.has_previous(),
+                        'current':result.number},
+                    'page':result.object_list}
+
+        elif pkfield in kwargs:
+            return self.queryset(request).get(pk=kwargs.get(pkfield))
+        elif self.summary_fields:
+            return self.queryset(request).filter(**kwargs).values(*self.summary_fields)
+        else:
+            return self.queryset(request).filter(**kwargs)
+
+
+
+class ServiceHandler(SteamHandler):
     allowed_methods = ('GET', 'PUT')
     model = Service
     fields = ('action_url', 'active_checks_enabled', 'check_command',
@@ -48,13 +89,15 @@ class ServiceHandler(BaseHandler):
               'retry_interval', 'service_description', 'servicegroups',
               'stalking_options', 'use', 'actions')
 
+    summary_fields = ('id', 'name', 'service_description', 'register')
+
     @classmethod
     def actions(cls, service):
-        kw = {'actionname': 'getcmd',
-              'serviceid': service.pk,
+        kw = {'actionname': 'getcmd', 'serviceid': service.pk,
               'extra': '%(HOSTNAME)s'}
         getcmd = reverse("service_actions", kwargs=kw)
         return {'get_cmd': {'method': 'GET', 'uri': getcmd}, }
+
 
 
 class ServiceActions(BaseHandler):

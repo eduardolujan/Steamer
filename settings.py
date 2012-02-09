@@ -111,7 +111,7 @@ LOGGING = {
         'steamer.djagios.models': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
         'steamer.djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
         'djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
-        'steamer.api.handlers': { 'handlers': ['console'], 'level': 'DEBUG', 'propagate': True, },
+        'steamer.api.handlers': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
     }
 }
 INTERNAL_IPS = ('127.0.0.1',)

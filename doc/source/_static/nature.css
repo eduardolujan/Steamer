@@ -235,6 +235,10 @@ pre {
     -moz-box-shadow: 1px 1px 1px #d8d8d8;
     border-radius: 3px;
 }
+
+tt > span.pre{
+    font-family: "M1mlight", "Courier New", Courier, monospace;
+}
  
 tt {
     background-color: #ecf0f3;
@@ -275,4 +279,9 @@ ul.circle li{ list-style: disc; }
 }
 .fright{
     float:right;
+}
+
+dl > dt > tt{
+    font-family: "YanLight", Arial, sans-serif;
+    font-size: 1.1em
 }

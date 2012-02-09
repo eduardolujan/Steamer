@@ -10,18 +10,18 @@ auth = { 'authentication': MultiAuthentication([HttpBasicAuthentication(), Djang
 
 
 service_h = Resource(ServiceHandler, **auth)
-list_service_h = Resource(ListServiceHandler, **auth)
+services_forhost = Resource(ListServiceHandler, **auth)
 host_h = Resource(HostHandler, **auth)
 service_actions = Resource(ServiceActions, **auth)
 manage_host_services = Resource(ManageHostServices, **auth)
 
 urlpatterns = patterns('',
     url(r'^service/actions/(?P<actionname>\w+)/(?P<serviceid>\w+)/(?P<extra>.*)/$', service_actions, None, 'service_actions',),
-    url(r'^service/forhost/(?P<hostid>\w+)/$', list_service_h),
+    url(r'^service/forhost/(?P<hostid>\w+)/$', services_forhost),
     url(r'^service/managehosts/(?P<serviceid>\w+)/$', manage_host_services),
     url(r'^service/managehosts/$', manage_host_services),
     url(r'^service/(?P<id>[^/]+)/', service_h),
-    url(r'^service/', list_service_h),
+    url(r'^service/', service_h),
     url(r'^host/templates/$', host_h, {'register': False,}),
     url(r'^host/(?P<hostid>\w+)/$', host_h),
     url(r'^host/$', host_h),

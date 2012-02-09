@@ -1,4 +1,5 @@
 
+auth
 apache 
 apache
 Apache
@@ -17,3 +18,22 @@ virtualhost
 wsgi
 Jochen
 Maes
+Http
+http
+nagios
+uri
+host
+hostgroup
+hostgroups
+Django
+Djagios
+cfg
+www
+api
+djagios
+api
+backend
+middleware
+prepending
+DoS
+unprocessable

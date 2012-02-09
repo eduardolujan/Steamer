@@ -3,3 +3,5 @@
 /cfg/import/*
 /cfg/import/*
 /doc/build/
+/db
+/staticfiles/
