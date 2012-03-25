@@ -24,6 +24,8 @@ import settings
 
 logger = logging.getLogger(__name__)
 
+
+
 ''' Djagios import tool,
 
 The Idea is fairly simple: don't make an exceptions based import script, treat all
@@ -52,8 +54,9 @@ somewhere.
     ModelX.related_manager.add(*[list of rel objects]) if it is a m2m one or through 
     __setattr__ if it is a foreign key.
 
-    3.1 save
+3 save
 '''
+
 
 def cleanse_empty(x):
     '''filter comments and empty lines'''

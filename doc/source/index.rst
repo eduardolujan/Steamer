@@ -12,14 +12,17 @@ Steamer's Documentation
    web
    api
    sec
+   appendix
 
-Admonition
-==========
 
-This software is **not yet ready for production use**, it is currently in alpha stage.
+.. cssclass:: dtable
 
-Description: An effortless system for monitoring provisioning. 
-==============================================================
+    .. warning ::
+
+        This software is **not yet ready for production use**, it is currently in alpha stage.
+
+An effortless system for monitoring provisioning. 
+=================================================
  
 /ˈstēmər/: A tool for provisioning monitoring services across multiple nagios instances, an in-progress attempt to automate the management of large `merlin-aware <http://www.op5.org/community/plugin-inventory/op5-projects/merlin>`_ nagios installations.
 

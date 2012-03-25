@@ -31,6 +31,7 @@
         {%- block rootrellink %}
         <li><a href="{{ pathto(master_doc) }}">{{ shorttitle|e }}</a>{{ reldelim1 }}</li>
         {%- endblock %}
+        <li class="fold"> &nbsp; <img src="{{ pathto('_static/max.png', 1)}}" alt="Toggle sidebar"/></li>
         {%- for parent in parents %}
           <li><a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a>{{ reldelim1 }}</li>
         {%- endfor %}

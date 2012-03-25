@@ -244,7 +244,7 @@ tt {
     background-color: #ecf0f3;
     color: #222;
     /* padding: 1px 2px; */
-    font-size: 1.1em;
+    font-size: 0.9em;
     font-family: monospace;
 }
 
@@ -279,6 +279,10 @@ ul.circle li{ list-style: disc; }
 }
 .fright{
     float:right;
+}
+
+.dtable{
+    display:table;
 }
 
 dl > dt > tt{

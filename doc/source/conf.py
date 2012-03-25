@@ -17,6 +17,16 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('../../../'))
+sys.path.insert(0, os.path.abspath('../../../steamer'))
+
+#Django stuff
+from django.core.management import setup_environ
+from steamer import settings
+
+setup_environ(settings)
+
+
 
 # -- General configuration -----------------------------------------------------
 
@@ -154,7 +164,7 @@ html_static_path = [u'_static']
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-#html_domain_indices = True
+html_domain_indices = True
 
 # If false, no index is generated.
 html_use_index = False

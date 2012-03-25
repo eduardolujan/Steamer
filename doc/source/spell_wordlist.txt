@@ -37,3 +37,9 @@ middleware
 prepending
 DoS
 unprocessable
+php
+mysql
+merlin
+poolers
+balancer
+tcp

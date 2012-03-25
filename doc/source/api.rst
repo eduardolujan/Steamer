@@ -6,8 +6,8 @@ Http requests
 
 .. http:get:: /api/sample_uri/[?format=format&p=1&l=20]
 
-    Every service accepts the ``format`` argument (django piston-default) and
-    will try to authenticate against basic http authentication, or django
+    Every service accepts the ``format`` argument (django-piston default) and
+    will try to authenticate via basic http authentication, or django
     authentication if the authorization header is not present.  So, a client
     should use the basic auth mechanism while browser's XMLHttpRequest client
     should include the django cookie header which its normally the default.
@@ -26,7 +26,6 @@ Http requests
         Accept: application/json, text/javascript
         Content-Type: application/json
 
-    
     :query format: one of ``json``, ``xml`` , defaults to ``json``
     :query p: page number, requires ``l`` , (enables pagination)
     :query l: entries per page, requires ``p``, (enables pagination)
@@ -83,6 +82,19 @@ Services routing
     and negated groups to the service. Service can be given in the uri or in the payload as
     the ``service`` key.
 
+    Payload args common for PUT & DELETE methods:
+
+    ==================  ====================================================== 
+      Arg                  Description               
+    ==================  ====================================================== 
+      **service**        Service ID if not present in the uri                 
+      **host**           Host ID                                             
+      **hostgroup**      Hostgroup ID                                         
+      **host_n**         Negated host ID (translates to nagios ``"!host"``)   
+      **hostgroup_n**    Negated hostgroup ID                                 
+    ==================  ====================================================== 
+
+
     Example request:
 
     .. sourcecode:: http
@@ -99,16 +111,19 @@ Services routing
 
     Based on the json payload, it will delete hosts, hostgroups, negated hosts,
     and negated groups from the service. Service can be given in the uri or in the payload as
-    the ``service`` key.
+    the ``service`` key. Payload keys are the same as in the PUT method.
 
 
 Hosts routing
 -------------
 
 
-.. http:get:: /api/host/
+.. todo:: 
 
-.. todo:: Inherit pagination in the hosts handlers.
+    This will be documented once the api freezes enough, there are plans
+    to implement generalized linking (kinda' HATEOAS) in the api.
+
+.. http:get:: /api/host/
 
 .. http:get:: /api/host/templates/
 
