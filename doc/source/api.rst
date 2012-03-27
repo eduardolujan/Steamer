@@ -121,7 +121,7 @@ Hosts routing
 .. todo:: 
 
     This will be documented once the api freezes enough, there are plans
-    to implement generalized linking (kinda' HATEOAS) in the api.
+    to implement generalized linking (kinda' HATEOAS).
 
 .. http:get:: /api/host/
 
@@ -134,31 +134,4 @@ Hosts routing
 .. http:delete:: /api/host/
 
 .. http:put:: /api/host/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

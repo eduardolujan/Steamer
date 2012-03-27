@@ -88,8 +88,8 @@ Run mysql_secure_installation, you will be presented with the opportunity to cha
 
 .. code-block:: mysql
 
-    mysql> GRANT ALL PRIVILEGES ON merlin.* TO merlin@'%' IDENTIFIED BY 'merlinpasswd'; 
-    mysql> GRANT ALL PRIVILEGES ON merlin.* TO merlin@'localhost' IDENTIFIED BY 'merlinpasswd';
+    mysql> GRANT ALL PRIVILEGES ON merlin.* TO 'merlin'@'%' IDENTIFIED BY 'merlinpasswd'; 
+    mysql> GRANT ALL PRIVILEGES ON merlin.* TO 'merlin'@'localhost' IDENTIFIED BY 'merlinpasswd';
     mysql> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%int.local' IDENTIFIED BY 'passwd';
     mysql> CREATE DATABASE merlin;
     mysql> FLUSH PRIVILEGES;
@@ -97,11 +97,25 @@ Run mysql_secure_installation, you will be presented with the opportunity to cha
 .. note :: 
     Get sure that DNS is properly configured, or use IP addresses, please read `this <http://dev.mysql.com/doc/refman/5.1/en/host-cache.html>`_. 
 
-Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** statement, you will need 2 internal addresses for the replication between mysql servers, pointing nagios-[1-2]int.local to the corresponding address as well as an 'internal' hostname in the :file:`/etc/hosts`
+Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** statement, you will need 2 internal addresses for the replication between mysql servers, pointing nagios-[1-2]int.local to the corresponding address as well as an 'internal' hostname in the :file:`/etc/hosts` ej::
+
+    10.0.0.1        nagios-aint.local local-int.local local-int
+    10.0.0.2        nagios-bint.local nagios-bint emerg-int
+
+    
+
+
+
+
+.. code-block:: sh
+
+    sudo mkdir -p  /opt/mysql/bin /opt/mysql/log /opt/mysql/relay
+    sudo chown -R mysql:mysql /opt/mysql
+
 
 **Edit the my.cnf files**::
 
-    bind-address  = <internal ip>
+    bind-address  = local-int #unique
     binlog_format=mixed
     server-id       = 2 #this must be unique.
     log-bin = /opt/mysql/bin/arch.log
@@ -111,14 +125,22 @@ Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** stat
     relay-log-info-file = /opt/mysql/relay/relay-log.info
     relay-log-index = /opt/mysql/relay/relay-log.index
     auto_increment_increment = 10
-    auto_increment_offset = 2
-    master-host = merlin01int
+    auto_increment_offset = 2 #unique
+    master-host = doctor-bint #uniq
     master-user = merlinuser
     port        = 6612
     master-port = 6612
     master-password = passwd 
     replicate-do-db = merlin
     #REVIEW /etc/apparmor.d/usr.sbin.mysqld !!
+
+.. code-block:: sh
+    
+        #Add an apparmor entry: "/opt/mysql/** rwk," if you changed the defaults
+        vi /etc/apparmor.d/usr.sbin.mysqld
+        sudo service apparmor restart
+        sudo service mysql restart
+
 
 .. warning :: 
 
@@ -131,6 +153,32 @@ Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** stat
 
         mysql> change master to MASTER_PORT = 6612;
 
+If all went ok you shold be able to connect with: ``mysql -P 6612 -u merlin -p -h local-int -D merlin``.
+
+
+Adding the balancer:
+
+.. code-block:: sh
+
+    > sudo cat <<EOF> /tmp/pen.conf
+
+    # Pen balancer
+    description     "Pen tcp balancer"
+    start on runlevel [2345]
+    stop on runlevel [!2345]
+    expect fork
+    respawn
+    #On host nagios-a
+    exec pen local-int:3306 local-int:6612 -u mysql -e nagios-b:6612
+    #On host nagios-b:
+    #exec pen local-int:3306 nagios-aint:6612 -u mysql -e local-int:6612
+    EOF
+
+    > sudo mv /tmp/pen.conf /etc/init/
+    > sudo chown root:root /etc/init/pen.conf
+    > sudo service pen start
+
+Again, if all went ok, you should be able to connect with ``mysql -h local-int -P 3306 -u merlin -p``
 
 
 Merlin source install and configuration
@@ -144,12 +192,12 @@ Merlin source install and configuration
     > git clone git://git.op5.org/nagios/merlin.git
     > cd merlin 
 
-Download this :download:`Makefile </Makefile.txt>` in order to complile merlin on ubuntu 11.10.
+Download this :download:`Makefile </Makefile.txt>` in order to compile merlin on Ubuntu 11.10.
 
 .. code-block:: sh
 
-    >make  
-    >sh install-merlin.sh --dest-dir=/opt/local/merlin --nagios-cfg=/opt/local/nagios/etc/nagios.cfg \
+    > make  
+    > sudo sh install-merlin.sh --dest-dir=/opt/local/merlin --nagios-cfg=/opt/local/nagios/etc/nagios.cfg \
      --db-type=mysql --db-user=merlin --db-pass=merlinpasswd \
      --db-name=merlin --db-root-pass=your_mysq_root_password
 
@@ -160,18 +208,18 @@ Configuring merlin is pretty straight-forward. Check the example.conf
 file that accompanies this release and you'll see most of the common
 examples available.
 
-Assuming that nagios1 has 192.168.1.1 as IP and nagios2 has 192.168.1.2:
+Assuming that nagios1 has 10.0.0.1 as IP and nagios2 has 10.0.0.2:
 
-On nagios1's :file:`merlin.conf` file::
-
-    peer nagios-a {
-        address = 192.168.1.2;
-    }
-
-On nagios2's :file:`merlin.conf` file::
+On nagios-a's :file:`/opt/local/merlin/merlin.conf` file::
 
     peer nagios-b {
-        address = 192.168.1.1;
+        address = 10.0.0.2;
+    }
+
+On nagios-b's :file:`/opt/local/merlin/merlin.conf` file::
+
+    peer nagios-b {
+        address = 10.0.0.1;
     }
 
      
