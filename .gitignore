@@ -1,7 +1,7 @@
 *.db
 *.sqlite
-/cfg/import/*
-/cfg/import/*
+/steamer/cfg/import/*
+/steamer/cfg/import/*
 /doc/build/
-/db
-/staticfiles/
+/steamer/db
+/steamer/staticfiles/
