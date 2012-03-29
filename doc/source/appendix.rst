@@ -169,7 +169,7 @@ Adding the balancer:
     expect fork
     respawn
     #On host nagios-a
-    exec pen local-int:3306 local-int:6612 -u mysql -e nagios-b:6612
+    exec pen local-int:3306 local-int:6612 -u mysql -e nagios-bint:6612
     #On host nagios-b:
     #exec pen local-int:3306 nagios-aint:6612 -u mysql -e local-int:6612
     EOF

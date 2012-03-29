@@ -1207,8 +1207,8 @@ class NagiosCfg(NagiosObject, models.Model):
     debug_file = models.CharField(max_length=255)
     # debug level should be a logical OR!
     debug_level = models.IntegerField(default=0)
-    debug_verbosity = models.IntegerField(default=1, \
-            choices=(('0','basic'),('1','detailed'),('1','extreme')))
+    debug_verbosity = models.IntegerField(default=1, 
+            choices=((0,'basic'),(1,'detailed'),(2,'extreme')))
     max_debug_file_size = models.IntegerField(default=1000000)
     p1_file = models.ForeignKey(CfgPath, related_name='NC_p1f_CP',\
             default=lambda : CfgPath.get('/usr/bin/p1.pl').id)

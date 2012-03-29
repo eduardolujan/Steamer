@@ -123,7 +123,10 @@ class ListServiceHandler(BaseHandler):
         exclusions.'''
 
         if hostid is not None:
-            host = Host.objects.get(pk=hostid)
+            try:
+                host = Host.objects.get(pk=hostid)
+            except Host.DoesNotExist:
+                host = Host.objects.get(host_name=hostid)
             parents = [host, ] + host.get_parents()
             qobjs = []
             ex_qobjs = {}
@@ -258,7 +261,8 @@ class HostHandler(BaseHandler):
         elif hostid is not None:
             return Host.objects.get(pk=hostid)
         else:
-            return Host.objects.all()
+            return Host.objects.all()\
+                    .values('id', 'host_name', 'name', 'address', 'register')
    
     def delete(self, request):
         try:

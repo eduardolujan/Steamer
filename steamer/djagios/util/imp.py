@@ -20,7 +20,7 @@ from steamer.djagios import models
 from steamer.djagios.models import Transform
 
 
-import settings
+from steamer import settings
 
 logger = logging.getLogger(__name__)
 

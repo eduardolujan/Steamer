@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import settings
+from steamer import settings
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.template import RequestContext, loader

@@ -4,7 +4,8 @@ Installation
 
 You will need to create a new virtual environment as a **non-root user**, if you're not used to virtual env here is the `documentation <http://www.virtualenv.org/en/latest/>`_ ::
 
-    > apt-get install python-dev
+    > sudo apt-get install python-dev
+    > #zypper in python-devel 
     > virtualenv app 
     > cd app && . bin/activate
     > pip install django django-piston django-grappelli fabric django-uuidfield chardet
