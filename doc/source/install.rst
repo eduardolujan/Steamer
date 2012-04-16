@@ -2,18 +2,25 @@
 Installation
 ============
 
-You will need to create a new virtual environment as a **non-root user**, if you're not used to virtual env here is the `documentation <http://www.virtualenv.org/en/latest/>`_ ::
+You will need to create a new virtual environment as a **non-root user**, if you're not used to virtual env here is the `documentation <http://www.virtualenv.org/en/latest/>`_ 
+
+.. code-block:: sh
 
     > sudo apt-get install python-dev
     > #zypper in python-devel 
     > virtualenv app 
     > cd app && . bin/activate
-    > pip install django django-piston django-grappelli fabric django-uuidfield chardet
+    > pip install django fabric django-uuidfield chardet
 
 
-Grab the code from github and name the root "steamer" ::
+Grab the code from github and name the root "steamer" 
+
+.. code-block:: sh
 
    > git clone git://github.com/jfardello/Steamer.git steamer && cd steamer
+   #grappelli & piston are bundled while they get django 1.4 support. 
+   > pip install misc/django-grappelli-2.4.0a1.tar.gz  
+   > pip install misc/django-piston-0.2.3.tar.gz
 
 
 Edit your database settings:
