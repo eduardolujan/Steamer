@@ -759,7 +759,7 @@ class CheckCommand(NagiosObject, models.Model):
     GET_BY=['command__command_name',]
     SPLIT_FIELD='command__command_name'
     command = models.ForeignKey('Command')
-    paramline = TextField()
+    paramline = models.TextField()
 
     @classmethod
     def get(self, what):
