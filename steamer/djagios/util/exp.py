@@ -143,7 +143,7 @@ class Syncer(object):
             #init the action & output log for this nagios_server
             self.output[ns.server_name]=[]
             #dump local config for host.
-            local_path = os.path.join(settings.DJAGIOS_EXP_PATH, ns.server_name)+"/"
+            local_path = os.path.join(settings.STEAMER_EXP_PATH, ns.server_name)+"/"
             if not os.path.exists(local_path):
                 os.mkdir(local_path)
             self.dump_local(ns.server_name, local_path)
@@ -167,7 +167,7 @@ class Syncer(object):
         env.host = ns.server_name
         env.port = 22
         env.user="root"
-        env.key_filename=os.path.expanduser("~/.ssh/id_dsa.pub")
+        env.key_filename=settings.STEAMER_KEY_FILE
 
         with hide('running', 'stdout', 'stderr'):
             rsync_out=rsync_project( ns.fabric_config_path, local_path, 
@@ -190,13 +190,13 @@ class Syncer(object):
         env.host_string = ns.server_name
         env.user="root"
         with hide('running', 'stdout', 'stderr'):
-            mkdout=run('if [ ! -d %(bkpdir)s ]; then /bin/mkdir -p %(bkdir)s ;fi' % \
+            mkdout=run('if [ ! -d %(bkdir)s ]; then /bin/mkdir -p %(bkdir)s ;fi' % \
                     {'bkdir':ns.fabric_backups_dest})
             epoch=int(time.mktime(datetime.datetime.now().timetuple()))
             output = run('tar cf -  %s | bzip2 -9 - > %s/djagios.%s.tar.bz2' % \
                         (ns.fabric_config_path, ns.fabric_backups_dest, epoch))
         if mkdout.succeeded:
-            self.sync_log.append('Checking for ' % ns.fabric_backups_dest )
+            self.sync_log.append('Checking for bkp location %s' % ns.fabric_backups_dest )
         if output.succeeded:
             self.sync_log.append('Remote rotated config for %s' % ns.server_name)
         else:

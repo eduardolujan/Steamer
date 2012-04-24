@@ -29,7 +29,7 @@ from steamer.api.forms import *
 
 @login_required
 def home(request):
-    t = loader.get_template('%s/home.html'%settings.DJAGIOS_THEME)
+    t = loader.get_template('%s/home.html'%settings.STEAMER_THEME)
     # getting lists of hosts and their services
     hlist = Host.objects.exclude(register=False).order_by('host_name').values('id', 'host_name')
     c = RequestContext(request, {'hlist':hlist})

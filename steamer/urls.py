@@ -7,7 +7,7 @@ from steamer import settings
 from django.contrib import admin
 admin.autodiscover()
 
-THEME = settings.DJAGIOS_THEME
+THEME = settings.STEAMER_THEME
 
 urlpatterns = patterns('',
     #Admin

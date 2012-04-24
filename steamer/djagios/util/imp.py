@@ -144,7 +144,7 @@ class DjagiosConfigParser(object):
                                     chardet.detect(fstring).get('encoding')
                                     )).encode('ascii','ignore'))
             except UnicodeDecodeError as detail:
-                def_enc = settings.DJAGIOS_IMPORTENCODING
+                def_enc = settings.STEAMER_IMPORTENCODING
                 logger.error('while reading %s \n, retrying with %s' % (filename, def_enc))
                 logger.debug(detail)
                 try:
@@ -276,7 +276,7 @@ class DjagiosConfigParser(object):
         logger.info('Loading nagios cfg to memory..')
         self.parse(filename)
 
-        for model_name in settings.DJAGIOS_IMPORT_OBJECTS: 
+        for model_name in settings.STEAMER_IMPORT_OBJECTS: 
             logger.info('Saving %s to database...' % model_name )
             self._translate_and_load(model_name)
 

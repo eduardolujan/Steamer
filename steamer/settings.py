@@ -19,11 +19,13 @@ USE_L10N = True
 MEDIA_ROOT = PROJECT_ROOT + "/media"
 MEDIA_URL = "/media"
 
-DJAGIOS_THEME = 'default'
-DJAGIOS_EXP_PATH = PROJECT_ROOT + '/configs/export'
-DJAGIOS_IMPORTENCODING = 'iso8859'
-DJAGIOS_IMPORT_OBJECTS = ('NagiosCfg', 'TimePeriod', 'Command', 'Contact', 
+STEAMER_THEME = 'default'
+STEAMER_EXP_PATH = PROJECT_ROOT + '/configs/export'
+STEAMER_IMPORTENCODING = 'iso8859'
+STEAMER_IMPORT_OBJECTS = ('NagiosCfg', 'TimePeriod', 'Command', 'Contact', 
                           'ContactGroup', 'Host', 'HostGroup', 'Service')
+STEAMER_KEY_FILE="~/.ssh/id_dsa.pub"
+
 NAGIOS_PREFIX="/opt/local/nagios/"
 STATIC_ROOT = PROJECT_ROOT + '/staticfiles/' 
 STATIC_URL = '/static/'
