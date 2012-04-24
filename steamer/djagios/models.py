@@ -17,6 +17,8 @@
 import os
 import logging
 import StringIO
+import zlib 
+import base64
 from operator import or_
 
 from django.db import models
@@ -757,10 +759,7 @@ class CheckCommand(NagiosObject, models.Model):
     GET_BY=['command__command_name',]
     SPLIT_FIELD='command__command_name'
     command = models.ForeignKey('Command')
-    paramline = models.CharField(max_length=255)
-
-    class Meta:
-        unique_together = ('command', 'paramline',)
+    paramline = TextField()
 
     @classmethod
     def get(self, what):

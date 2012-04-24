@@ -7,7 +7,7 @@ except:
 
 MANAGERS = ADMINS
 
-TEMPLATE_DEBUG = DEBUG = True
+TEMPLATE_DEBUG = DEBUG = False
 
 APPEND_SLASH = True
 SEND_BROKEN_LINK_EMAILS=False
@@ -40,7 +40,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SECRET_KEY = ''
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',

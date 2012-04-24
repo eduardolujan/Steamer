@@ -10,3 +10,5 @@ DJAGIOS_EXP_DIR = PROJECT_ROOT + "/cfg/export"
 DATABASES = {'default': {
                 'ENGINE': 'django.db.backends.sqlite3', 
                 'NAME': '%s/db/steamer.db' % PROJECT_ROOT } }
+
+SECRET_KEY='changeme!!'

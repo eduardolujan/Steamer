@@ -190,9 +190,13 @@ class Syncer(object):
         env.host_string = ns.server_name
         env.user="root"
         with hide('running', 'stdout', 'stderr'):
+            mkdout=run('if [ ! -d %(bkpdir)s ]; then /bin/mkdir -p %(bkdir)s ;fi' % \
+                    {'bkdir':ns.fabric_backups_dest})
             epoch=int(time.mktime(datetime.datetime.now().timetuple()))
             output = run('tar cf -  %s | bzip2 -9 - > %s/djagios.%s.tar.bz2' % \
                         (ns.fabric_config_path, ns.fabric_backups_dest, epoch))
+        if mkdout.succeeded:
+            self.sync_log.append('Checking for ' % ns.fabric_backups_dest )
         if output.succeeded:
             self.sync_log.append('Remote rotated config for %s' % ns.server_name)
         else:
