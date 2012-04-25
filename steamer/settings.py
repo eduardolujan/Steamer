@@ -52,6 +52,13 @@ TEMPLATE_CONTEXT_PROCESSORS = default_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     "django.core.context_processors.request",
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'locking_backend',
+    }
+}
+
 
 
 MIDDLEWARE_CLASSES = (

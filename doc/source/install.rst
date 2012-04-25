@@ -48,6 +48,7 @@ Edit your database settings:
 Initiate the database,  collect the app's `static files <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/>`_ for the httpd server, and generate a seed for django ::
 
     > ./manage.py syncdb
+    > ./manage.py createcachetable
     > ./manage.py collectstatic
     > echo `./manage.py genkey` >> custom_settings.py
 

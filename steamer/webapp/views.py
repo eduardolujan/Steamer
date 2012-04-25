@@ -21,15 +21,17 @@ from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
+from django.core.cache import cache
 
 from steamer.djagios.models import *
 from steamer.djagios.util import Syncer
 from steamer.api.forms import *
 
+LOCK_EXPIRE = 120
 
 @login_required
 def home(request):
-    t = loader.get_template('%s/home.html'%settings.STEAMER_THEME)
+    t = loader.get_template('%s/home.html'%settings.DJAGIOS_THEME)
     # getting lists of hosts and their services
     hlist = Host.objects.exclude(register=False).order_by('host_name').values('id', 'host_name')
     c = RequestContext(request, {'hlist':hlist})
@@ -38,13 +40,26 @@ def home(request):
 
 @permission_required('djagios.change_service', login_url='/login')
 def push_and_reload(request):
-    sync = Syncer()
-    sync.sync()
-    sync.disconnect_all()
-    json_ret=simplejson.dumps({'stderr':"",
-                               'stdout':"\n".join(sync.sync_log),
-                               'failed':False,
-                               'succeeded':True}, indent=4)
+    callback = request.GET.get('callback', '')
+    if cache.add('push_lock', "true", LOCK_EXPIRE):
+        sync = Syncer()
+        try:
+            sync.sync()
+            sync.disconnect_all()
+            retlog = "\n".join(sync.sync_log)
+            succeed = True
+        except Exception, e:
+            retlog = e
+            succeed = False
+        finally:
+            cache.delete('push_lock')
+    else:
+        succeed = False
+        retlog = '''Someone is pushing a new configuration, please wait
+                 while the lock gets released.'''
+
+    json_ret=simplejson.dumps({'out':retlog, 'succeeded':succeed }, indent=4)
+    json_ret = callback + '(' + json_ret + ');'
     return HttpResponse(json_ret, mimetype="application/javascript")
 
 

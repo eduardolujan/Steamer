@@ -41,15 +41,19 @@
                                 
                                     if (r > 1) { 
                                         document['spinner']=new Boxy("<p>&nbsp;</p><p>Please wait..<img src=\"/static/img/loader.gif\"></p>") ;
-                                        $.getJSON('/json/push', function(data){
-                                            document['spinner'].boxy.remove()
-                                            var response = data.succeeded ? data.stdout : data.stderr;
-                                            var push_status = $('<p style="min-width:600px;max-height:450px;overflow:scroll;">').html(response.replace(/\n/g, "<br />"));
-                                            new Boxy(push_status[0], {title: "Push results", modal: true, y: "20%"}) 
-                                            $("p.boxy-content").slimScroll({ height:'500px', color:'#5FBA3D'})
-                                            });
+                                        var response = {}
+                                        $.ajax({url:'/json/push', dataType:'jsonp', success:function(data){response = data}})
+                                                .always(function(data){
+                                                        console.log(response)
+                                                        console.log(data)
+                                                        document['spinner'].boxy.remove()
+                                                        var push_status = $('<p style="min-width:600px;max-height:450px;overflow:scroll;">')
+                                                        .html(response.out.replace(/\n/g, "<br />"));
+                                                        new Boxy(push_status[0], {title: "Push results", modal: true, y: "20%"}) 
+                                                        $("p.boxy-content").slimScroll({ height:'500px', color:'#5FBA3D'})
+                                                });
                                     }
-                                
+ 
                        });
                 }
              ); 

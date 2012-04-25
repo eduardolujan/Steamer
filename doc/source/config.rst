@@ -34,6 +34,7 @@ When you relate a host to a nagios instance, you 're limiting the exported confi
 
 |Third| Export : There are three ways of doing this:
 Ensure that the user running steamer is able to do password-less ssh connections to the nagios user on the remote machines, this is really dangerous for the normal www user, that's why it is recommended running steamer with a different user, see **ref here**.
+TODO: ssh_config
 
     Via the command line ::
 
