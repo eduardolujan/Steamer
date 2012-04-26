@@ -3,7 +3,9 @@ Importing and exporting data
 
 You can model your data from scratch, or you can import it as follows: 
 
-|First| Copy your nagios "etc" directory into the import directory and import through the management command::
+|First| 
+
+Copy your nagios "etc" directory into the import directory and import through the management command::
     
     > scp -r root@nagios1:/opt/local/nagios/etc  cfg/import/nagios1 
     > ./manage.py import -s nagios1 -c nagios1/nagios.cfg -o /opt/local/nagios/etc/
@@ -33,18 +35,27 @@ When you relate a host to a nagios instance, you 're limiting the exported confi
 
 
 |Third| Export : There are three ways of doing this:
-Ensure that the user running steamer is able to do password-less ssh connections to the nagios user on the remote machines, this is really dangerous for the normal www user, that's why it is recommended running steamer with a different user, see **ref here**.
-TODO: ssh_config
+Ensure that the user running steamer is able to do password-less ssh connections to the nagios user on the remote machines, this is really dangerous for the normal www user, that's why it is recommended running steamer with a different user.
 
-    Via the command line ::
+In order to work correctly steamer will read its ~/.ssh/config file, so for each server you must provide a key_file as seen below.:: 
 
-        > ./manage.py export -s servername
+        Host nagios-?int*
+            user nagios
+            IdentityFile ~/.ssh/id_dsa
+
+
+
+* Via the command line::
+
+    > ./manage.py export -s servername
     
-    Via admin site nagios_server's management commands:
-    **image here**
+* Via admin site nagios_server's management commands:
+
+    **TODO:image here**
     
-    Via the Lite app:
-    **image here**
+* Via the Lite app:
+
+    **TODO:image here**
 
 
 
