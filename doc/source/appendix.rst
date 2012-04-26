@@ -7,11 +7,12 @@ Merlin Installation
 
 
 
+.. cssclass:: dtable
 
-.. warning:: 
+    .. warning:: 
 
-    This installation is used to test steamer in a merlin environment, 
-    and thus, it is very **specific to the author** and may be outdated.
+        This installation is used to test steamer in a merlin environment, 
+        and thus, it is very **specific to the author** and may be outdated.
         
 .. cssclass:: fright 
    
@@ -97,7 +98,7 @@ Run mysql_secure_installation, you will be presented with the opportunity to cha
 .. note :: 
     Get sure that DNS is properly configured, or use IP addresses, please read `this <http://dev.mysql.com/doc/refman/5.1/en/host-cache.html>`_. 
 
-Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** statement, you will need 2 internal addresses for the replication between mysql servers, pointing nagios-[1-2]int.local to the corresponding address as well as an 'internal' hostname in the :file:`/etc/hosts` ej::
+Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** statement, you will need 2 internal addresses for the replication between mysql servers, pointing nagios-[1-2]int.local to the corresponding address as well as an 'internal' hostname in the :file:`/etc/hosts` ex::
 
     10.0.0.1        nagios-aint.local local-int.local local-int
     10.0.0.2        nagios-bint.local nagios-bint emerg-int
@@ -147,13 +148,15 @@ Keep in mind the **'%int.local'** part of the **'GRANT REPLICATION SLAVE'** stat
     The standard mysql client port is 3306, if a slave ever gets to the master on that port, it will save that 
     info on its internal tables, which will cause synchronization errors if you try to reach to a different port 
     no matter what you are using on the config files. In order to solve that, use the "CHANGE MASTER TO" 
-    statement. Please take a look `here <http://dev.mysql.com/doc/refman/5.1/en/mysql-cluster-replication-preparation.html>`_
+    statement. Please take a look `here <http://dev.mysql.com/doc/refman/5.1/en/mysql-cluster-replication-preparation.html>`_.
+    The same happens to user/password/host information, you'll need to stop the slave (STOP SLAVE;), alter those parameters and 
+    start the slave: (START SLAVE;).
 
 .. code-block:: mysql
 
         mysql> change master to MASTER_PORT = 6612;
 
-If all went ok you shold be able to connect with: ``mysql -P 6612 -u merlin -p -h local-int -D merlin``.
+If all went OK you should be able to connect with: ``mysql -P 6612 -u merlin -p -h local-int -D merlin``.
 
 
 Adding the balancer:
@@ -178,7 +181,7 @@ Adding the balancer:
     > sudo chown root:root /etc/init/pen.conf
     > sudo service pen start
 
-Again, if all went ok, you should be able to connect with ``mysql -h local-int -P 3306 -u merlin -p``
+Again, if all went as expected, you should be able to connect with ``mysql -h local-int -P 3306 -u merlin -p``
 
 
 Merlin source install and configuration

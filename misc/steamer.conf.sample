@@ -1,0 +1,42 @@
+<VirtualHost *:80>
+
+    ServerAdmin webmaster@steamer.site
+    ServerName steamer.site
+    DocumentRoot /var/empty
+    ErrorLog /var/log/apache2/steamer-error_log
+    CustomLog /var/log/apache2/steamer-access_log combined
+
+    HostnameLookups Off
+    UseCanonicalName Off
+    ServerSignature On
+
+    Alias /static/ "/opt/local/steamer/app/steamer/staticfiles/"
+
+    <Directory "/opt/local/steamer/app/steamer/staticfiles/">
+	AllowOverride None
+	Order allow,deny
+	Allow from all
+    </Directory>
+
+    WSGIDaemonProcess steamer \
+	user=steamer \
+	python-path=/opt/local/steamer/lib/python2.7/site-packages/ \
+	processes=1 \
+        threads=25
+    WSGIProcessGroup steamer
+    WSGIScriptAlias / "/opt/local/steamer/bin/wsgi.py"
+    WSGIPassAuthorization On
+	
+    <Directory /jagios/Steamer/steamer/>
+        AllowOverride None
+        Order allow,deny
+        Deny from all
+	    <Files wsgi.py>
+		    Order deny,allow
+		    Allow from all
+	    </Files>
+    </Directory>
+
+</VirtualHost>
+    WSGIPythonOptimize 2
+

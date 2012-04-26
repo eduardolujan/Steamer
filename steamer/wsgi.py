@@ -15,7 +15,7 @@ framework.
 """
 import os, sys
 
-sys.path.insert(0, '/home/INTERNA/jfardello/Documents/proyectos/djagios/Steamer')
+sys.path.insert(0, os.path.expanduser('~/app'))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "steamer.settings")
 
 # This application object is used by any WSGI server configured to use this
