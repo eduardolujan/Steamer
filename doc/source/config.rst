@@ -7,8 +7,11 @@ You can model your data from scratch, or you can import it as follows:
 
 Copy your nagios "etc" directory into the import directory and import through the management command::
     
+    > cd ~/app/steamer
+    > mkdir -p cfg/import cfg/export
     > scp -r root@nagios1:/opt/local/nagios/etc  cfg/import/nagios1 
-    > ./manage.py import -s nagios1 -c nagios1/nagios.cfg -o /opt/local/nagios/etc/
+    > ~/app/manage.py import -s nagios1 -c nagios1/nagios.cfg -o /opt/local/nagios/etc/
+
     
 The **-o** argument is the original path for the main config file, you mus ensure that all nagios cfg includes are inside that "etc" directory.
         
@@ -45,15 +48,15 @@ In order to work correctly steamer will read its ~/.ssh/config file, so for each
 
 
 
-* Via the command line::
+1. Via the command line::
 
     > ./manage.py export -s servername
     
-* Via admin site nagios_server's management commands:
+2. Via admin site nagios_server's management commands:
 
     **TODO:image here**
     
-* Via the Lite app:
+3. Via the Lite app:
 
     **TODO:image here**
 

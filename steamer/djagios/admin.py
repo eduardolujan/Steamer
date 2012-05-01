@@ -16,18 +16,23 @@
 
 import time
 import datetime
+import logging
 from copy import deepcopy
 
 from django.forms import Textarea
 from django.contrib import admin
 from django.conf import settings
+from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib.flatpages.models import FlatPage
+from django.contrib import messages
 
 from steamer.djagios.models import *
+from steamer.djagios.util import Syncer, sync_status
 
+logger = logging.getLogger(__name__)
 
 class ChosenModelAdmin(admin.ModelAdmin):
     '''A custom ModelAdmin for overriding the admin/grappelli
@@ -89,7 +94,7 @@ class HostGroupAdmin(ChosenModelAdmin):
 
 class NagiosCfgAdmin(ChosenModelAdmin):
     list_display = ('server_name', 'fabric_allow_deploy')
-    actions = ['clone_model_instance', ]
+    actions = ['clone_model_instance', 'export_instance', ]
 
     def clone_model_instance(self, request, queryset):
         for obj in queryset:
@@ -103,6 +108,44 @@ class NagiosCfgAdmin(ChosenModelAdmin):
             clonned_obj.save()
 
     clone_model_instance.short_description = _("Clone the selected items")
+
+    def export_instance(self, request, queryset):
+        if cache.add('push_lock', "true", settings.STEAMER_LOCK_EXPIRE):
+            if queryset.count() > 0:
+                ex_srvs = map(lambda s: s['server_name'], 
+                              queryset.values('server_name'))
+                logger.debug("Exporting: %s" % ex_srvs )
+                self.sync = Syncer(server_name=ex_srvs)
+                try:
+                    self.sync.sync()
+                    self.sync.disconnect_all()
+                    succeed = True
+                except Exception, e:
+                    logger.error(e)
+                    raise e 
+                    succeed = False
+                    messages.error(request, 'An error has been logged, please check the server log.')
+                finally:
+                    logger.debug(self.sync.status)
+                    for server_name in self.sync.status.keys():
+                        stat = self.sync.status[server_name]
+                        if stat == sync_status['ROLLBACK_MADE']:
+                            messages.error(request,
+                                    '%s\'s config rolled back due to config validation errors.' % server_name)
+                        elif stat == sync_status['ROLLBACK_FAILED']:
+                            messages.error(request,
+                                    'Failed rollback at %s\'s config, config may be unusable.' % server_name)
+                        else:
+                            method = "info" if self.sync.status[server_name] else "error"
+                            message = "succeed" if self.sync.status[server_name] else "failed"
+                            getattr(messages, method)(request, 'Export of %s %s' % (server_name, message))
+                    cache.delete('push_lock')
+        else:
+            messages.error(request, 'Steamer server is currently exporting, please try again later.')
+                
+    export_instance.short_description = _("Export the selected servers configurations.")
+
+
 
 
 class CfgPathAdmin(admin.ModelAdmin):

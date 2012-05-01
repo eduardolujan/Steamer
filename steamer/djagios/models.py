@@ -610,7 +610,12 @@ class Contact(NagiosObject, models.Model):
             blank=True, null=True)
     email = models.EmailField(blank=True)
     pager = models.CharField(max_length=255, blank=True)
-    address = models.TextField(blank=True)
+    address1 = models.TextField(blank=True)
+    address2 = models.TextField(blank=True)
+    address3 = models.TextField(blank=True)
+    address4 = models.TextField(blank=True)
+    address5 = models.TextField(blank=True)
+    address6 = models.TextField(blank=True)
     can_submit_commands = models.NullBooleanField(blank=True,null=True)
     retain_status_information = models.NullBooleanField(blank=True,null=True)
     retain_nonstatus_information = models.NullBooleanField(blank=True,null=True)
@@ -1213,6 +1218,13 @@ class NagiosCfg(NagiosObject, models.Model):
             default=lambda : CfgPath.get('/usr/bin/p1.pl').id)
     daemon_dumps_core = models.NullBooleanField(default=False)
     bare_update_check = models.NullBooleanField(default=False)
+
+    def clean(self):
+        #Steamer backups and restores the cfg_dir, this will avoid restoring on / 
+        #or removing the /etc...
+        from django.core.exceptions import ValidationError
+        if len(os.path.normpath(self.fabric_config_path).strip("/").split("/")) < 3:
+            raise ValidationError('Sorry, fabric_config_path depth must be greater than 2.')
 
     def __unicode__(self):
         return self.server_name

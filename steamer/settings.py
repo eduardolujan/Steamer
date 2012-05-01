@@ -7,7 +7,8 @@ except:
 
 MANAGERS = ADMINS
 
-TEMPLATE_DEBUG = DEBUG = False
+DEBUG = False
+TEMPLATE_DEBUG = False
 
 APPEND_SLASH = True
 SEND_BROKEN_LINK_EMAILS=False
@@ -20,18 +21,19 @@ MEDIA_ROOT = PROJECT_ROOT + "/media"
 MEDIA_URL = "/media"
 
 STEAMER_THEME = 'default'
-STEAMER_EXP_PATH = PROJECT_ROOT + '/configs/export'
+STEAMER_EXP_PATH = PROJECT_ROOT + '/cfg/export'
 STEAMER_IMPORTENCODING = 'iso8859'
-STEAMER_IMPORT_OBJECTS = ('NagiosCfg', 'TimePeriod', 'Command', 'Contact', 
-                          'ContactGroup', 'Host', 'HostGroup', 'Service')
-STEAMER_KEY_FILE="~/.ssh/id_dsa.pub"
-
+STEAMER_KEY_FILE="~/.ssh/id_steamer_dsa.pub"
+STEAMER_LOCK_EXPIRE = 120
+STEAMER_RESTART_NAGIOS = False
 NAGIOS_PREFIX="/opt/local/nagios/"
 STATIC_ROOT = PROJECT_ROOT + '/staticfiles/' 
 STATIC_URL = '/static/'
 GRAPPELLI_ADMIN_TITLE="Steamer admin"
 GRAPPELLI_INDEX_DASHBOARD = 'steamer.djagios.dashboard.DocDashboard'
 
+STEAMER_IMPORT_OBJECTS = ('NagiosCfg', 'TimePeriod', 'Command', 'Contact', 
+                          'ContactGroup', 'Host', 'HostGroup', 'Service')
 
 ADMIN_MEDIA_PREFIX = STATIC_URL+'grappelli/'
 
@@ -116,10 +118,10 @@ LOGGING = {
     },
     'loggers': {
         'django.request': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
-        'steamer.djagios.models': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
-        'steamer.djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
-        'djagios.util': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
-        'steamer.api.handlers': { 'handlers': ['console'], 'level': 'INFO', 'propagate': True, },
+        'steamer.djagios.models': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
+        'steamer.djagios.util': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
+        'steamer.djagios.admin': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
+        'steamer.api.handlers': { 'handlers': ['console'], 'level': 'ERROR', 'propagate': True, },
     }
 }
 INTERNAL_IPS = ('127.0.0.1',)

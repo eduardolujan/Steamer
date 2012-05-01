@@ -21,6 +21,7 @@ import time
 import datetime
 
 from fabric.context_managers import hide
+from fabric.context_managers import settings as stts
 from fabric.network import disconnect_all
 from fabric.api import run, local, env
 from fabric.contrib.project import rsync_project
@@ -30,6 +31,9 @@ from steamer import settings
 from steamer.djagios.models import *
 
 logger = logging.getLogger(__name__)
+
+sync_status = {'ROLLBACK_MADE': -1,
+               'ROLLBACK_FAILED': -2}
 
 class Exporter():
     """Exporter provides the functionality to export the different objects to the correct format
@@ -75,7 +79,7 @@ class Exporter():
         for o in OBJECT_LIST:
             if o.__name__ is 'Host':
                 #Filter hosts pointing to our nagios server destination.
-                objs = o.objects.filter(Q(nagios_server__server_name=nagios_server) | Q(register=False))
+                objs = o.objects.distinct(Q(nagios_server__server_name=nagios_server) | Q(register=False))
             elif o.__name__ is 'Service':
                 #Filter services used in hosts pointing to our nagios server destination.
                 objs = o.objects.distinct(
@@ -130,16 +134,20 @@ class Syncer(object):
     exportable nagios servers, backups its working config, checks the config and if
     it works, it will reload the nagios server, else it will rollback to the old config.
     '''
-    sync_log=[]
-    backups={}
-    output={}
 
     def __init__(self, *args, **kwargs):
         self.exp = Exporter()
         self.servers=kwargs.get('server_name', False)
+        logger.info('Syncer.__init__, self.servers: %s' % self.servers)
+        env.use_ssh_config = True
+        self.status={}
+        self.bkp={}
+        self.sync_log=[]
+        self.output={}
 
     def sync(self, *args, **kwargs):
         for ns in self.get_hosts():
+            logger.info('Syncer.sync, exporting %s' % ns.server_name)
             #init the action & output log for this nagios_server
             self.output[ns.server_name]=[]
             #dump local config for host.
@@ -150,8 +158,9 @@ class Syncer(object):
             #remote backup of the nagios config.
             if self.rotate(ns):
                 #try to reload the nagios config
-                if not self.rsyncnreload(local_path, ns):
-                    self.rollback(ns.server_name)
+                syncnreload = self.rsyncnreload(local_path, ns)
+                if syncnreload is not True:
+                    self.status[ns.server_name] = syncnreload
                     break
             else:
                 self.sync_log.append('Could not rotate the config for %s, aborting' % ns.server_name)
@@ -163,38 +172,52 @@ class Syncer(object):
 
     def rsyncnreload(self, local_path, ns):
 
-        env.host_string = ns.server_name
-        env.host = ns.server_name
-        env.port = 22
-        env.user="root"
-        env.key_filename=settings.STEAMER_KEY_FILE
-
-        with hide('running', 'stdout', 'stderr'):
+        logger.info('Syncer.rsyncnreload, called for: %s' % ns.server_name)
+        with stts(hide('warnings', 'running', 'stdout', 'stderr'), warn_only=True):
+            env.host_string = ns.server_name
             rsync_out=rsync_project( ns.fabric_config_path, local_path, 
                                      [c.path for c in ns.cfg_dir.all()],
                                      True)
+            self.status[ns.server_name] = False
             self.output[ns.server_name].append(rsync_out)
             self.sync_log.append('Remote synced config for %s' % ns.server_name)
             if rsync_out.succeeded:
-                reload_out=run('%s -v %s/nagios.cfg' % ( ns.fabric_nagios_bin, ns.fabric_config_path))
-                self.output[ns.server_name].append(reload_out)
-                #reload_out=run('/etc/init.d/nagios restart')
-                #self.output[ns.server_name].append(reload_out)
-                self.sync_log.append('Nagios config reloaded for %s' % ns.server_name)
+                cfgtest_out=run('%s -v %s/nagios.cfg' % ( ns.fabric_nagios_bin, ns.fabric_config_path), pty=False)
+                self.output[ns.server_name].append(rsync_out)
+                if cfgtest_out.succeeded:
+                    if settings.STEAMER_RESTART_NAGIOS:
+                        reload_out=run('/etc/init.d/nagios restart')
+                        self.output[ns.server_name].append(rsync_out)
+                    self.status[ns.server_name] = True
+                    self.sync_log.append('Nagios config reloaded for %s' % ns.server_name)
+                else:
+                    #Trying to rollback!
+                    if self.rollback(ns):
+                        return sync_status['ROLLBACK_MADE']
+                    else:
+                        return sync_status['ROLLBACK_FAILED']
             else:
+                self.status[ns.server_name] = False
                 self.sync_log.append('Rsync failed for %s: \n %s' % (ns.server_name, rsync_out))
 
+            #return reload_out.succeeded or rsync_out.succeeded
             return rsync_out.succeeded
 
     def rotate(self, ns):
-        env.host_string = ns.server_name
-        env.user="root"
-        with hide('running', 'stdout', 'stderr'):
+        with stts(hide('running', 'stdout', 'stderr'), warn_only=True):
+            env.host_string = ns.server_name
             mkdout=run('if [ ! -d %(bkdir)s ]; then /bin/mkdir -p %(bkdir)s ;fi' % \
                     {'bkdir':ns.fabric_backups_dest})
             epoch=int(time.mktime(datetime.datetime.now().timetuple()))
-            output = run('tar cf -  %s | bzip2 -9 - > %s/djagios.%s.tar.bz2' % \
-                        (ns.fabric_config_path, ns.fabric_backups_dest, epoch))
+            output = run('cd %(confpath)s/../ && tar cf - %(basename)s | bzip2 -9 - > \
+                    %(bdest)s/djagios.%(epoch)s.tar.bz2' % \
+                    {'confpath':ns.fabric_config_path, 
+                     'basename':os.path.basename(ns.fabric_config_path.rstrip('/')),
+                     'bdest':ns.fabric_backups_dest, 
+                     'epoch':epoch})
+            if output.succeeded:
+                #save the last backup location, so we can roll back to the last config.
+                self.bkp[ns.server_name] = '%s/djagios.%s.tar.bz2' % (ns.fabric_backups_dest, epoch)
         if mkdout.succeeded:
             self.sync_log.append('Checking for bkp location %s' % ns.fabric_backups_dest )
         if output.succeeded:
@@ -204,13 +227,26 @@ class Syncer(object):
         self.output[ns.server_name].append(output)
         return output.succeeded
 
-    def rollback(self, server_name):
-        logger.info("Rollback unimplemented!!!")
+    def rollback(self, ns):
+        logger.info("Rollback called")
+        with stts(hide('running', 'stdout', 'stderr'), warn_only=True):
+            env.host_string = ns.server_name
+            cmd = 'cd %(config_path)s/../  && mv %(basecfg)s %(basecfg)s.failed.%(epoch)s && \
+            tar xjf %(bkpfile)s'
+            out=run( cmd % {'config_path':ns.fabric_config_path, 
+                            'basecfg': os.path.basename(ns.fabric_config_path.rstrip('/')),
+                            'epoch':int(time.mktime(datetime.datetime.now().timetuple())),
+                            'bkpfile': self.bkp[ns.server_name]})
+            if out.failed:
+                logger.error('Rollback failed: \n%s' % out)
+            return out.succeeded
 
     def get_hosts(self):
         if self.servers:
+            logger.info('get_hosts, self.servers: %s' % self.servers)
             return NagiosCfg.objects.filter(fabric_allow_deploy=True, server_name__in=self.servers)
         else:
+            logger.info('get_hosts, self.servers: %s' % self.servers)
             return NagiosCfg.objects.filter(fabric_allow_deploy=True)
 
     

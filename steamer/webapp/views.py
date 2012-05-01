@@ -27,7 +27,6 @@ from steamer.djagios.models import *
 from steamer.djagios.util import Syncer
 from steamer.api.forms import *
 
-LOCK_EXPIRE = 120
 
 @login_required
 def home(request):
@@ -41,7 +40,7 @@ def home(request):
 @permission_required('djagios.change_service', login_url='/login')
 def push_and_reload(request):
     callback = request.GET.get('callback', '')
-    if cache.add('push_lock', "true", LOCK_EXPIRE):
+    if cache.add('push_lock', "true", settings.STEAMER_LOCK_EXPIRE):
         sync = Syncer()
         try:
             sync.sync()

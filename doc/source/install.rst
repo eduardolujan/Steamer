@@ -6,10 +6,10 @@ You will need to create a new virtual environment as a **non-root user**, if you
 
 .. code-block:: sh
 
-    > sudo apt-get install python-dev python-mysqldb
+    > sudo apt-get install python-dev python-mysqldb libapache2-mod-wsgi
     > cd ~/.. && virtualenv --system-site-packages $(basename ~) 
     > cd && . bin/activate
-    > pip install django==1.4 fabric django-uuidfield chardet
+    > pip install django==1.3 django-grappelli==2.3.8 fabric django-uuidfield chardet
 
 
 Grab the code from github. 
@@ -17,8 +17,6 @@ Grab the code from github.
 .. code-block:: sh
 
    > git clone git://github.com/jfardello/Steamer.git app  && cd app
-   > pip install misc/django-grappelli-2.4.0a1.tar.gz  
-   > pip install misc/django-piston-0.2.3.tar.gz
 
 
 Edit your database settings:

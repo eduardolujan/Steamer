@@ -1,2 +1,2 @@
 from imp import *
-from exp import Syncer
+from exp import Syncer, sync_status
