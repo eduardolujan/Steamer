@@ -21,8 +21,15 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "steamer.settings")
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+
+try:
+    #Django 1.4
+    from django.core.wsgi import get_wsgi_application
+    application = get_wsgi_application()
+except ImportError:
+    #Django 1.3
+    import django.core.handlers.wsgi
+    application = django.core.handlers.wsgi.WSGIHandler()
 
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
