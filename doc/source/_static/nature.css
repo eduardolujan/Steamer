@@ -64,7 +64,7 @@ div.footer a {
 }
  
 div.related {
-    background-color: #6BA81E;
+    background-color: #556270;
     line-height: 32px;
     color: #fff;
     text-shadow: 0px 1px 0 #444;
@@ -72,7 +72,7 @@ div.related {
 }
  
 div.related a {
-    color: #E2F3CC;
+    color: #FFF;
 }
  
 div.sphinxsidebar {
@@ -92,7 +92,6 @@ div.sphinxsidebar h4 {
     font-weight: normal;
     margin: 0;
     padding: 5px 10px;
-    background-color: #ddd;
     text-shadow: 1px 1px 0 white
 }
 
@@ -210,7 +209,7 @@ div.topic {
 }
  
 div.warning {
-    background-color: #ff9;
+    background-color: #F0F4FF;
     border: 1px solid #ccc;
     border-radius:3px;
 }
@@ -289,3 +288,23 @@ dl > dt > tt{
     font-family: "YanLight", Arial, sans-serif;
     font-size: 1.1em
 }
+
+.tdee{
+  font-width: bold;
+  color: white;
+  font-size: 2.2em;
+  font-family: YanReg, Helvetica, Arial, sans-serif;
+  text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+}
+ 

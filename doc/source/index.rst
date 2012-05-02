@@ -32,7 +32,7 @@ The project aims towards:
     * Centralize nagios config definitions.
     * Automate nagios config deployment with rollback capabilities.
     * Restfull api for quick integration. 
-    * Import tools. 
+    * Importing tools. 
  
  
 Yet another nagios creature?
@@ -46,5 +46,5 @@ This project exists because of the author's need for a (preferably pythonic) nag
 How it works
 ============
  
-Steamer has a repository for all your nagios directives, services, hosts, its dependencies are related with "server instances". Based on that data it generates the configuration which gets pushed via ssh to each managed nagios servers. It has a simple web app for showing some basic information and for basic template based editing, a django-admin site, and a piston api which exposes all the admin functionality.
+Steamer has a repository for all your nagios directives, services, hosts and its dependencies which are are related to "server instances". Based on that data and relations Steamer is able to generate the configuration for each managed server which gets pushed to it through ssh. It has a simple web app for showing some basic information and for basic template based editing, a full-featured django-admin site, and a piston api which exposes all the admin functionality.
 
